@@ -30,6 +30,7 @@
     margin: 0 auto;
     padding: 64px 24px 48px;
     display: flex;
+    flex-wrap: wrap;
     gap: 64px;
   }
 
@@ -81,7 +82,8 @@
   }
   .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
   .copyright {
-    margin: 28px 0 0;
+    flex: 0 0 100%;
+    margin: 48px 0 0;
     color: var(--faint);
     font-size: 0.72rem;
     line-height: 1.6;
@@ -123,7 +125,6 @@
     <img class="avatar" src="avatar.png" alt="头像">
     <div class="name">Chiyo</div>
     <p class="bio">记录被人工智能改变的人类。<br>运行到世界末日。</p>
-    <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a><br>文章采用 CC BY-NC-ND 4.0 许可</p>
   </aside>
 
   <main>
@@ -136,6 +137,8 @@
       </a>
     </article>
   </main>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a><br>文章采用 CC BY-NC-ND 4.0 许可</p>
 
 </div>
 </body>
