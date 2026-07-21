@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chiyo</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --accent: #0e7490;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 14px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 24px 48px;
+    display: flex;
+    gap: 64px;
+  }
+
+  /* ---------- 左侧个人信息 ---------- */
+  aside {
+    flex: 0 0 180px;
+    padding-top: 4px;
+  }
+
+  /* 方形头像 */
+  .avatar {
+    width: 96px;
+    height: 96px;
+    display: block;
+    object-fit: cover;
+    border: 1px solid var(--border);
+  }
+
+  aside .name {
+    margin-top: 16px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  aside .bio {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  aside nav {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  aside nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color .15s;
+  }
+  aside nav a:hover { color: var(--accent); }
+
+  .copyright {
+    margin: 28px 0 0;
+    color: var(--faint);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  /* ---------- 文章列表 ---------- */
+  main { flex: 1; min-width: 0; }
+
+  .post { padding: 20px 0; border-top: 1px solid var(--border); }
+  .post:first-of-type { border-top: none; padding-top: 0; }
+  .post a { text-decoration: none; color: inherit; display: block; }
+  .post h2 {
+    margin: 0 0 2px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color .15s;
+  }
+  .post a:hover h2 { color: var(--accent); }
+  .date {
+    font-size: 0.75rem; color: var(--faint);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
+  }
+  .excerpt {
+    margin: 6px 0 0; color: var(--muted); font-size: 0.85rem; line-height: 1.7;
+  }
+
+  /* 窄屏:侧栏收到顶部 */
+  @media (max-width: 640px) {
+    .wrap { flex-direction: column; gap: 32px; padding-top: 48px; }
+    aside { flex: none; }
+    aside nav { flex-direction: row; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <aside>
+    <img class="avatar" src="avatar.png" alt="头像">
+    <div class="name">Chiyo</div>
+    <p class="bio">记录被人工智能改变的人类。<br>运行到世界末日。</p>
+    <nav>
+      <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <p class="copyright">© 2026 Chiyo<br>文章采用 CC BY-NC-ND 4.0 许可</p>
+  </aside>
+
+  <main>
+    <!-- 新文章加在最上面,复制一个 .post 块改内容即可 -->
+    <article class="post">
+      <a href="post.html">
+        <h2>WAIC 2026：热浪在场内，头条在场外</h2>
+        <div class="date">2026-07-21</div>
+        <p class="excerpt">每年抱怨高温，每年吐槽 OpenAI、Anthropic 和 Gemini 都不参加还能称得上「世界」人工智能大会吗，每年如期来到世博展览馆。<br><br>因为，要「在场」。</p>
+      </a>
+    </article>
+  </main>
+
+</div>
+</body>
+</html>
