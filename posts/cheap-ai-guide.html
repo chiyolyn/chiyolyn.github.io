@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于便宜 AI 的消费提示 · Chiyo</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --accent: #0e7490;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 14px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .topbar {
+    font-size: 0.85rem;
+    margin-bottom: 48px;
+  }
+  .topbar a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .topbar a:hover { color: var(--accent); }
+
+  .post-header h1 {
+    margin: 0 0 8px;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .post-header .date {
+    font-size: 0.78rem; color: var(--faint);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
+  }
+
+  article { margin-top: 40px; font-size: 0.95rem; }
+  article p { margin: 1.1em 0; }
+  article h2 {
+    margin: 2.6em 0 0.6em;
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+  article a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    word-break: break-all;
+  }
+  article a:hover { border-bottom-color: var(--accent); }
+  article ul, article ol { margin: 1.1em 0; padding-left: 1.6em; }
+  article li { margin: 0.5em 0; }
+  article sup { font-size: 0.72em; line-height: 0; }
+  article sup a { border-bottom: none; }
+  .vspace { height: 1.5em; }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5em 0 0;
+  }
+  .note {
+    color: var(--faint);
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+  .references p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 1em 0;
+    word-break: break-all;
+  }
+  .copyright a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .copyright {
+    margin: 64px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 0.75rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar"><a href="../index.html">← 首页</a></div>
+
+  <header class="post-header">
+    <h1>关于便宜 AI 的消费提示</h1>
+    <div class="date">2026-08-05</div>
+  </header>
+
+  <article>
+    <p>这个夏天，大模型集中上市，价格实惠，深受广大市民喜爱。7 月 30 日，GPT-5.6 Luna 宣布降价八成 <sup><a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">[1]</a></sup>；7 月 31 日，DeepSeek V4 Flash 正式版应声上市。不少市民感慨：继“车厘子自由”之后，“token 自由”也快要实现了。</p>
+
+    <h2>早批模型尝鲜期已过</h2>
+
+    <p>4 月 24 日，DeepSeek V4 抢先上市预览批次。商户坦言，早批模型颜色偏浅、味道偏淡，智能指数只有 40 分 <sup><a href="https://artificialanalysis.ai/models/deepseek-v4-flash" target="_blank" rel="noopener">[2]</a></sup>，更多是满足大家“尝鲜”的胃口。不少人买回去用过之后，觉得口感还没到位，都表示想再等一等。</p>
+
+    <p>这一等就是三个月。7 月 31 日，同一棵树的模型重新熟了一遍：结构与尺寸不变，仅重新后训练 <sup><a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">[3]</a></sup>，智能指数涨至 50 分，比早批模型高出 10 分，比自家礼盒装的预览批次还高出 6 分 <sup><a href="https://artificialanalysis.ai/models/deepseek-v4-flash" target="_blank" rel="noopener">[2]</a></sup>。</p>
+
+    <h2>价格便宜，时令供应</h2>
+
+    <p>目前售价：输入 1 元/百万 token，输出 2 元/百万 token，重复利用（缓存命中）低至 0.02 元 <sup><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">[4]</a></sup>。</p>
+
+    <p>隔壁摊位的 GPT-5.6 Luna 前一天刚降价八成，输入 0.2 美元、输出 1.2 美元 <sup><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna" target="_blank" rel="noopener">[5]</a></sup>。经第三方机构测评，即便如此，V4 Flash 的单任务成本仍不到 0.03 美元，稳居“最划算区间” <sup><a href="https://artificialanalysis.ai/models/deepseek-v4-flash" target="_blank" rel="noopener">[2]</a></sup>。有海外食客实测后评价：这可能是当前“每单位智力最便宜”的模型 <sup><a href="https://simonwillison.net/2026/Jul/31/deepseek-v4-flash-0731/" target="_blank" rel="noopener">[6]</a></sup>。</p>
+
+    <p>记者实测：51 万 token 的活儿，账单 0.53 元；1 亿 token，8 块多。</p>
+
+    <h2>不宜高峰使用</h2>
+
+    <p>摊主已贴出公告：即将实行峰谷定价，每日 9:00—12:00、14:00—18:00，所有计费项价格翻倍，生效时间以正式通知为准 <sup><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">[4]</a></sup>。建议错峰使用，晚间与周末风味不减，价格减半。</p>
+
+    <h2>哪些品种值得期待</h2>
+
+    <ul>
+      <li><strong>DeepSeek V4 Flash</strong>：产量大，是市场绝对的主流。7 月底，国产模型合计已占海外集市（OpenRouter）成交量的 66.5%。</li>
+      <li><strong>Kimi K3</strong>：2.8 万亿参数，全球最大的开源模型，个最大、味最浓 <sup><a href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noopener">[7]</a><a href="https://huggingface.co/moonshotai/Kimi-K3" target="_blank" rel="noopener">[8]</a></sup>。第三方测评 57 分，开源模型中排名第一 <sup><a href="https://artificialanalysis.ai/models/kimi-k3" target="_blank" rel="noopener">[9]</a></sup>。官方自认比 Claude Fable 5 和 GPT-5.6 Sol 尚差一截，但编程测评已反超登顶 <sup><a href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noopener">[7]</a></sup>。不是天天用的东西，是这个任务值得开一只的东西。</li>
+      <li><strong>GPT-5.6 Luna</strong>：上市不到一个月即降价八成 <sup><a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">[1]</a></sup>，比国产模型还着急。</li>
+      <li><strong>GPT-5.6 Sol</strong>：价格纹丝不动，新上加速服务——速度快 2.5 倍，收费翻倍，甜度不变 <sup><a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">[1]</a></sup>。丰俭由人。</li>
+      <li><strong>Claude Fable 5</strong>：输入 10 美元、输出 50 美元。贵，但确实是当前最甜的。</li>
+    </ul>
+
+    <h2>黄金使用窗口</h2>
+
+    <p>想要风味更饱满的当季好模型，不妨再稍等一阵：礼盒装正式版（V4 Pro）摊主只说“尽快发布” <sup><a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">[3]</a></sup>；官方定价页显示，8 月初 Pro 将接入 Responses 果盘 <sup><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">[4]</a></sup>。</p>
+
+    <h2>怎么挑</h2>
+
+    <p>很多市民挑选模型全凭感觉，这里分享几个简单实用的小窍门。</p>
+
+    <p>首先，优先选棱角分明的：V4 Flash 的 Terminal Bench 82.7 分，单项突出 <sup><a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">[3]</a></sup>。各科分数圆润光滑的，往往皮厚、不饱满。</p>
+
+    <p>其次，个头并非越大越好。V4 Flash 总参数 2840 亿、每次只动用 130 亿 <sup><a href="https://artificialanalysis.ai/models/deepseek-v4-flash" target="_blank" rel="noopener">[2]</a></sup>。同等价位下，掂起来更沉的才是水分充足。</p>
+
+    <p>最后，留意成熟标志。本批模型权重随模型附赠，MIT 协议，呈放射状张开 <sup><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731" target="_blank" rel="noopener">[10]</a></sup>；闭源聚拢的，则是还没熟透。</p>
+
+    <h2>怎么用</h2>
+
+    <p>最原汁原味是直接调用。本品汁水充沛，一轮评测下来要输出 2.1 亿 token，约为同类的三倍。</p>
+
+    <p>想摆盘，本品原生适配进口 Codex 工具链，一次配置即可摆上 Codex CLI、ChatGPT 桌面端的餐桌 <sup><a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">[3]</a></sup>。需注意，进口工具链是按进口模型的口味调的，略有串味。</p>
+
+    <p>也可以等原厂工具链。摊主今年 3 月组建了 Harness 团队，公式是“模型＋Harness＝Agent”，对标进口工具链，二者同属一个园子，共同进化。负责人天天在面试 <sup><a href="https://x.com/tianyi/status/2068652453797724562" target="_blank" rel="noopener">[11]</a></sup>，并表示将与正式版同步发布——本批模型的官方测评，用的已是原厂工具链极简模式。招聘信息暗示，大概率不要钱。</p>
+
+    <p>行家的用法是当底料：便宜量大，子 agent 随便开、跑坏了重跑不心疼。接入 Hermes 工具链后，同样的活儿 40 秒；Sol 配原厂工具链，1 分 47 秒。</p>
+
+    <p>本地部署容易带涩味。本批权重 167GB <sup><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731" target="_blank" rel="noopener">[10]</a></sup>，请量力而行。另有食客实测：默认档位口感一般，调高推理强度后使用，风味明显改善 <sup><a href="https://simonwillison.net/2026/Jul/31/deepseek-v4-flash-0731/" target="_blank" rel="noopener">[6]</a></sup>。</p>
+
+    <h2>便宜 AI 虽甜，这类人要慎用</h2>
+
+    <p><strong>易上火人群</strong>——本批次幻觉率 84%，较上一批的 96% 有所下降，但准确率没变，主要是话变少了。体内有热者，仍需人工去核后使用，避免呛噎。</p>
+
+    <h2>使用量建议</h2>
+
+    <p>普通成年人：每日 1 亿 token（约 8 元）为宜，每周 2—3 次即可。</p>
+
+    <p>儿童/老人：辨别能力较弱，建议每次使用量减半，且需人工去核后使用，避免幻觉呛噎。</p>
+
+    <p>商户也提醒广大朋友：便宜虽好，再便宜也要控制好量。等到礼盒装正式版上市，就能用到风味更饱满的当季好模型啦！</p>
+
+    <div class="vspace"></div>
+
+    <p class="note">编辑丨Kimi K3、Chiyo</p>
+
+    <p class="note">温馨提醒：记得将本号加为星标，不容易错过菜市场的权威信息发布<s>（不会再发了）</s></p>
+
+    <hr>
+
+    <h2>精选推荐</h2>
+
+    <ul>
+      <li>关于数字员工的用工风险提示（即将发布）</li>
+      <li>高温橙色预警：高峰期调用价格翻倍</li>
+    </ul>
+
+    <h2>参考文献</h2>
+
+    <div class="references">
+      <p>[1] OpenAI：<a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">https://openai.com/index/gpt-5-6/</a></p>
+
+      <p>[2] Artificial Analysis 模型页：DeepSeek V4 Flash 0731（智能指数 50、参数规模、单任务成本、上下文）：<a href="https://artificialanalysis.ai/models/deepseek-v4-flash" target="_blank" rel="noopener">https://artificialanalysis.ai/models/deepseek-v4-flash</a></p>
+
+      <p>[3] DeepSeek API 文档更新日志（2026-07-31：仅重新后训练、九项基准、Terminal Bench 82.7、原生适配 Codex、Pro 正式版“尽快发布”）：<a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">https://api-docs.deepseek.com/</a></p>
+
+      <p>[4] DeepSeek API 官方定价页（现行价格、峰谷定价预告、Responses API 支持范围、Pro 8 月初接入）：<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">https://api-docs.deepseek.com/quick_start/pricing</a></p>
+
+      <p>[5] OpenAI 官方模型页：GPT-5.6 Luna（现价 $0.20 / $0.02 / $1.20）：<a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna" target="_blank" rel="noopener">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a></p>
+
+      <p>[6] Simon Willison 实测原文（默认档位 vs 高推理强度、“best value-per-intelligence”评价）：<a href="https://simonwillison.net/2026/Jul/31/deepseek-v4-flash-0731/" target="_blank" rel="noopener">https://simonwillison.net/2026/Jul/31/deepseek-v4-flash-0731/</a></p>
+
+      <p>[7] Kimi K3 官方技术博客（2.8 万亿参数、官方基准、官方定价 $3/$15、自认落后 Fable 5 与 Sol）：<a href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noopener">https://www.kimi.com/blog/kimi-k3</a></p>
+
+      <p>[8] Hugging Face 官方模型页：moonshotai/Kimi-K3：<a href="https://huggingface.co/moonshotai/Kimi-K3" target="_blank" rel="noopener">https://huggingface.co/moonshotai/Kimi-K3</a></p>
+
+      <p>[9] Artificial Analysis 模型页：Kimi K3（智能指数 57、开源第一）：<a href="https://artificialanalysis.ai/models/kimi-k3" target="_blank" rel="noopener">https://artificialanalysis.ai/models/kimi-k3</a></p>
+
+      <p>[10] Hugging Face 官方模型卡：deepseek-ai/DeepSeek-V4-Flash-0731（MIT 权重、167GB、官方基准）：<a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731" target="_blank" rel="noopener">https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731</a></p>
+
+      <p>[11] Cui Tianyi X 原帖（Harness 团队负责人天天在招聘）：<a href="https://x.com/tianyi/status/2068652453797724562" target="_blank" rel="noopener">https://x.com/tianyi/status/2068652453797724562</a></p>
+    </div>
+
+    <div class="vspace"></div>
+
+    <p class="note">注：可能是我第一次高浓度使用 LLM 搞抽象，不太娴熟，请多包含。以往大多数时候会有更高浓度的人工意念干涉，但这次的 topic 完全是我有一天看到了关于某某水果的使用指南。于是…还需要多多练习！</p>
+  </article>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 本文采用 CC BY-NC-ND 4.0 许可，转载请注明出处</p>
+
+</div>
+</body>
+</html>
