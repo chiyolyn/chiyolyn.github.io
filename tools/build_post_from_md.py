@@ -211,13 +211,13 @@ page = """<!DOCTYPE html>
     top: 120px;
     left: calc(50% + 352px);
     width: 200px;
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     line-height: 1.55;
     max-height: calc(100vh - 160px);
     overflow-y: auto;
   }
   .toc .toc-group {
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     letter-spacing: 0.12em;
     color: var(--faint);
     margin-bottom: 6px;
@@ -225,9 +225,13 @@ page = """<!DOCTYPE html>
   .toc .toc-group a {
     color: inherit;
     text-decoration: none;
+    border-left: none;
+    padding: 0;
+    margin: 0;
     transition: color .15s;
   }
-  .toc .toc-group a:hover { color: var(--accent); }
+  .toc .toc-group a:hover,
+  .toc .toc-group a.active { color: var(--accent); }
   .toc a {
     display: block;
     color: var(--faint);
