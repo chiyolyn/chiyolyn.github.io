@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """将《你无法真正理解没做过的事情》md 转换为 chiyolyn.github.io 风格的 HTML 文章页。"""
-import re, html
+import re, html, os
 
-SRC = "~/Documents/chiyo-blog/Dive Club 第 176 期：设计 Claude Code（以及接下来会发生什么）/你无法真正理解没做过的事情.md"
-DST = "~/Documents/code/chiyolyn.github.io/posts/designing-claude-code.html"
+SRC = os.path.expanduser("~/Documents/chiyo-blog/Dive Club 第 176 期：设计 Claude Code（以及接下来会发生什么）/你无法真正理解没做过的事情.md")
+DST = os.path.expanduser("~/Documents/code/chiyolyn.github.io/posts/designing-claude-code.html")
 
 lines = open(SRC, encoding="utf-8").read().split("\n")
 
