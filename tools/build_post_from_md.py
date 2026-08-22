@@ -25,6 +25,7 @@ toc_yiwen = []     # (id, title) 译文部分
 sec_n = 0
 t_n = 0
 para = []
+tags_line = ""   # 话题标签行
 
 def flush_para():
     global para
@@ -53,10 +54,10 @@ while i < len(lines):
         i += 1
         continue
 
-    # 话题标签行（按 md 里的位置渲染为小灰字）
+    # 话题标签行（收进右侧栏底部，不进正文）
     if s.startswith("#ClaudeCode"):
         flush_para()
-        body.append(f'<p class="note">{esc(s)}</p>')
+        tags_line = s
         i += 1
         continue
 
@@ -92,10 +93,14 @@ while i < len(lines):
         i += 1
         continue
 
-    # 分隔线
+    # 分隔线：6 个及以上连字符渲染为横线，3-5 个渲染为空白间距
     if re.match(r"^-{3,}$", s):
         flush_para()
-        if body:  # 文章开头的分隔线不产生额外空隙
+        if not body:
+            pass  # 文章开头的分隔线不产生额外空隙
+        elif len(s) >= 6:
+            body.append("<hr>")
+        else:
             body.append('<div class="vspace"></div>')
         i += 1
         continue
@@ -145,11 +150,14 @@ def toc_links(items):
         f'    <a href="#{i}">{t}</a>' for i, t in items
     )
 
+tags_html = "<br>\n".join(esc(t) for t in tags_line.split())
+
 toc_html = f"""<nav class="toc" id="toc">
   <div class="toc-group">记录</div>
 {toc_links(toc_jilu)}
   <div class="toc-group" style="margin-top:16px"><a href="#transcript">译文</a></div>
 {toc_links(toc_yiwen)}
+  <div class="toc-tags">{tags_html}</div>
 </nav>"""
 
 page = """<!DOCTYPE html>
@@ -243,6 +251,13 @@ page = """<!DOCTYPE html>
   }
   .toc a:hover { color: var(--accent); }
   .toc a.active { color: var(--accent); border-left-color: var(--accent); }
+  .toc .toc-tags {
+    margin-top: 20px;
+    font-size: 0.72rem;
+    color: var(--faint);
+    line-height: 2;
+    letter-spacing: 0.02em;
+  }
   @media (max-width: 1180px) { .toc { display: none; } }
 
   article { margin-top: 40px; font-size: 0.95rem; }
@@ -277,6 +292,11 @@ page = """<!DOCTYPE html>
     border: 1px solid var(--border);
   }
   .vspace { height: 1.5em; }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.4em 0;
+  }
   .note {
     color: var(--faint);
     font-size: 0.82rem;
@@ -289,6 +309,32 @@ page = """<!DOCTYPE html>
     color: var(--faint);
     font-size: 0.75rem;
   }
+  .post-nav {
+    margin: 56px 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+  .post-nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .post-nav a:hover { color: var(--accent); }
+  #toTop {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    font-size: 0.78rem;
+    color: var(--faint);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, color .15s, border-color .15s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; }
+  #toTop:hover { color: var(--accent); border-color: var(--accent); }
   .copyright a {
     color: inherit;
     text-decoration: none;
@@ -312,9 +358,15 @@ __TOC__
     __ARTICLE__
   </article>
 
-  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 本文采用 CC BY-NC-ND 4.0 许可，转载请注明出处</p>
+  <nav class="post-nav">
+    <a href="../index.html">← 回到首页</a>
+  </nav>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 记录部分采用 CC BY-NC-ND 4.0 许可，转载请注明出处；播客原文及音频版权归 Dive Club 所有</p>
 
 </div>
+
+<a href="#" id="toTop" aria-label="回到顶部">↑</a>
 
 <script>
 (function () {
@@ -335,6 +387,18 @@ __TOC__
   }
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  var toTop = document.getElementById('toTop');
+  function onScrollTop() {
+    if (window.scrollY > 600) toTop.classList.add('show');
+    else toTop.classList.remove('show');
+  }
+  document.addEventListener('scroll', onScrollTop, { passive: true });
+  onScrollTop();
+  toTop.addEventListener('click', function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 })();
 </script>
 </body>
