@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>“沉浸在喜欢的事里，回过神来已是凌晨四点半” · Chiyo</title>
+<meta name="description" content="小记图像 APP tone，和它的开发者与制作公司。">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --accent: #0e7490;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 14px; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .topbar { font-size: 0.85rem; margin-bottom: 48px; }
+  .topbar a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .topbar a:hover { color: var(--accent); }
+
+  .post-header h1 {
+    margin: 0 0 6px;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .post-header .subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+  .post-header .date {
+    font-size: 0.78rem; color: var(--faint);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
+  }
+
+  article { margin-top: 40px; font-size: 0.95rem; }
+  article p { margin: 1.1em 0; }
+  article a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    word-break: break-all;
+  }
+  article a:hover { border-bottom-color: var(--accent); }
+  blockquote {
+    margin: 1.4em 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  /* 带 hover 翻译的引用 */
+  .qtrans blockquote { cursor: pointer; margin-bottom: 0; }
+  .qtrans blockquote::after {
+    content: "译";
+    font-size: 0.65rem;
+    color: var(--faint);
+    vertical-align: super;
+    margin-left: 4px;
+    opacity: 0.7;
+  }
+  .qtrans .trans {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    margin-left: 19px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    transition: max-height .3s ease, opacity .3s ease, margin-top .3s ease;
+  }
+  .qtrans:hover .trans, .qtrans.open .trans {
+    max-height: 10em;
+    opacity: 1;
+    margin-top: 0.5em;
+  }
+  figure.photo { margin: 1.6em 0; text-align: center; }
+  figure.photo img {
+    max-width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  figure.photo-row {
+    margin: 1.6em 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  figure.photo-row a {
+    border-bottom: none;
+    line-height: 0;
+  }
+  figure.photo-row img {
+    height: 220px;
+    width: auto;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: opacity .15s;
+  }
+  figure.photo-row a:hover img { opacity: 0.85; }
+  @media (max-width: 640px) {
+    figure.photo-row img { height: 150px; }
+  }
+  figure.photo-split {
+    margin: 1.6em 0;
+    display: flex;
+    gap: 18px;
+    align-items: stretch;
+    justify-content: center;
+  }
+  figure.photo-split .imgs {
+    display: flex;
+    gap: 10px;
+  }
+  figure.photo-split a {
+    border-bottom: none;
+    line-height: 0;
+  }
+  figure.photo-split img {
+    height: 220px;
+    width: auto;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: opacity .15s;
+  }
+  figure.photo-split a:hover img { opacity: 0.85; }
+  figure.photo-split .divider {
+    width: 1px;
+    background: var(--border);
+  }
+  figure.photo-split figcaption {
+    margin-top: 8px;
+    text-align: center;
+    color: var(--faint);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+  @media (max-width: 640px) {
+    figure.photo-split { gap: 12px; }
+    figure.photo-split img { height: 150px; }
+    figure.photo-split figcaption { font-size: 0.72rem; }
+  }
+  .note {
+    color: var(--faint);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    text-align: center;
+  }
+  .vspace { height: 1.5em; }
+  .sep {
+    margin: 2.2em 0;
+    text-align: center;
+    color: var(--faint);
+    font-size: 0.9rem;
+    letter-spacing: 0.6em;
+    padding-left: 0.6em;
+  }
+  .copyright {
+    margin: 64px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 0.75rem;
+  }
+  .post-nav {
+    margin: 56px 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+  .post-nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .post-nav a:hover { color: var(--accent); }
+  #toTop {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    font-size: 0.78rem;
+    color: var(--faint);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, color .15s, border-color .15s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; }
+  #toTop:hover { color: var(--accent); border-color: var(--accent); }
+  .copyright a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  figure.photo a, figure.photo-row a, figure.photo-split a { cursor: zoom-in; }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s;
+    cursor: zoom-out;
+  }
+  .lightbox.show { opacity: 1; pointer-events: auto; }
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 90vh;
+    border-radius: 6px;
+    box-shadow: 0 12px 48px rgba(15, 23, 42, 0.35);
+    cursor: default;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar"><a href="../index.html">← 首页</a></div>
+
+  <header class="post-header">
+    <h1>“沉浸在喜欢的事里，回过神来已是凌晨四点半”</h1>
+    <div class="subtitle">小记图像 APP “tone”，和它的开发者与制作公司</div>
+    <div class="date">2026-09-01</div>
+  </header>
+
+  <article>
+    <blockquote>好きなことに没頭し、気づけば朝の四時半になっていた。</blockquote>
+    <p>说实话，tone 官网上的小房子示例图有点难懂，第一次看到 tone 时，没准备下载。</p>
+    <figure class="photo"><img src="../images/tone-home.png" alt="tone 官网示例图" style="width:272px" loading="lazy"></figure>
+    <p class="note">图源：<a href="https://tone.yojihan.com/" target="_blank" rel="noopener">https://tone.yojihan.com/</a></p>
+    <p>“大概就是一些 halftone 的数字艺术之类吧。”很快抛之脑后。</p>
+    <p>后来刷到了日本画师用 tone 处理的几张小插画，才发觉有点可爱。又拿自己的 OC（original character，原创角色）试了试，真的很可爱。</p>
+    <figure class="photo-split"><div class="side"><div class="imgs"><a href="../images/tone-oc-2.jpg"><img src="../images/tone-oc-2.jpg" alt="用 tone 处理的 OC 插图二" loading="lazy"></a>
+<a href="../images/tone-oc-3.jpg"><img src="../images/tone-oc-3.jpg" alt="用 tone 处理的 OC 插图三" loading="lazy"></a></div><figcaption>个人OC-ikarin</figcaption></div><div class="divider"></div><div class="side"><div class="imgs"><a href="../images/tone-oc-1.jpg"><img src="../images/tone-oc-1.jpg" alt="用 tone 处理的 OC 插图一" loading="lazy"></a></div><figcaption>近期为测试 Skill 创作的猞猁猫耳女孩（未命名）</figcaption></div></figure>
+    <p>tone APP 给人的感觉挺奇妙。点进去只有一个一个小格子，和你想要制作的那张图。<strong>看不到一点属于开发者的“签名”</strong>。</p>
+    <p>tone 能调节设置的有点多：配色、网点精细度、网点角度、纸张颜色、边框留白、圆角弧度…有时会冒出一种错觉，再多点几下要收费了。不过它会基于图片自动选择合适的墨色，也有随机样式推荐，解救不了解 halftone 刚上手的玩家。</p>
+    <p>开发者 pnly 在 7 月 22 日发布的那条推，有 23.9 M 浏览；7 月 23 日登上图形/设计榜单第 1 位；8 月 9 日，pnly 说 tone 获得了 11 万的下载。它支持日语、英语、韩文、简中、繁中、繁中（香港）。后来有了 iPad 和 Android 版。</p>
+    <p>不过让我感兴趣的起源，只是那几张可爱的插画，和简单而精细的产品。</p>
+    <p>遂查了查关于 tone 和它的开发者 / 制作公司的事情：</p>
+    <div class="sep">···</div>
+    <p>1. tone 对于图像的处理，没有用到 AI。</p>
+    <p>2. 所有数据保存在设备本地。</p>
+    <p>3. 制作公司是株式会社四時半（Yojihan Inc.）。四時半，正如其官网首页所说，“沉浸在喜欢的事情里，注意到的时候，已经是清晨四点半。”</p>
+    <figure class="photo"><img src="../images/yojihan-home.png" alt="株式会社四時半官网首页" loading="lazy"></figure>
+    <p class="note">图源：<a href="https://yojihan.com/" target="_blank" rel="noopener">https://yojihan.com/</a></p>
+    <p>4. Yojihan 8 月 10 日正式登记成立。目前有三条公开产品线：图像加工 APP“tone”，共享看板/日记 APP 帳（とばり / Tobari），以及在 “coming soon”的宽幅鲭江眼镜品牌 <strong>OJO</strong>。</p>
+    <figure class="photo"><img src="../images/ojo-glasses.png" alt="OJO 眼镜品牌页" loading="lazy"></figure>
+    <p class="note">没看错，是眼镜。图源：<a href="https://ojo.yojihan.com/" target="_blank" rel="noopener">https://ojo.yojihan.com/</a></p>
+    <p>5. Yojihan 官网罗列出来的成员共两位，一位是 takatsun，一位是 pnly（即 X 上的@pnly_tar）。</p>
+    <p>6. tone 利用规约的署名是 pnly 而非 Yojihan。推测 tone 由其个人开发。</p>
+    <p>7. pnly 的个人主页 <a href="https://pnly.xyz/" target="_blank" rel="noopener">https://pnly.xyz/</a></p>
+    <p>8. tone 最初是作为 APP 帳（とばり）的一种表现形式开始制作的。当油墨色数、网点、套版偏移都能细致调节后，才决定独立成单独应用发布。</p>
+    <p>9. pnly 在 X 上官宣 tone，是 7 月 22 日，官宣帳则是 7 月 18 日。pnly 称帳为“冷蔵庫の扉みたいなアプリ”（像冰箱门一样的 APP）。</p>
+    <p>10. 正如开发者所说，tone 是模拟油印在印刷中的物理行为。这并不只是“修辞手法”。tone 把真实印刷的工作流拆为三层，油墨层（INK）→ 加网层（粒子/TONE）→ 承印层（PAPER/FRAME），这正是制版厂思考一件印刷品的顺序。其参数本身携带工艺意义，例如版ずれ（套版错位）、線数（LPI）等等。</p>
+    <p>11. pnly 在采访中表示，希望 tone 不会止步于智能手机之中，有朝一日能成为连接纸张、海报、ZINE（「ジン」，来自英文 zine，即 magazine 的缩略））等可以拿在手中的物品的契机。</p>
+    <p>12. 目前正在研讨和开发中的功能包括：把文字作为一个“版”叠加；组合多张图片；制作效果随时间变化的 GIF 等。</p>
+    <p>以及一些说不上精确的信息/推测：</p>
+    <p>11. hashout.jp 认为，tone 在 X 上走红，原因包括：尝试成本低，且完全不依赖个人设计技能，一定能达到类似效果；差异化卖点清晰，为光滑精致的数字世界增加模拟纸张的印刷不均；双层设计兼顾不同人群，简易模式一键出图，自定义模式支持细致调节；首批投稿中有重音 Teto 的二创图，通过粉丝社区铺开。（原推见 <a href="https://x.com/rei_illust_game/status/2080971427478684142" target="_blank" rel="noopener">https://x.com/rei_illust_game/status/2080971427478684142</a>  画师れい 7 月 25 日发布，这条推获 2K 赞、190 转发。）</p>
+    <p>12.  基于 pnly 的笔记和产品风格，推测其设计哲学：“反便利”，喜欢自然存在于生活中，而非高效地制作和生产；有物理世界的“触感”（手ざわり）；素朴即美德。</p>
+    <p>之后有时间再补完整的报告。</p>
+    <div class="vspace"></div>
+    <div class="qtrans"><blockquote>写真や作品を効率よく処理するためだけではなく、触りながら試し、思いがけない仕上がりと出会い、紙に刷ったような少し懐かしく、やさしい表情の一枚をつくっていく。<br>
+toneを、そんな時間のための道具として育てていきます。</blockquote><div class="trans">并不仅仅是为了高效地处理照片和作品，而是用手触碰、尝试，与意想不到的成品不期而遇，渐渐做出一张宛如印在纸上、带着些许怀旧又温柔表情的作品。<br>
+我们希望把 tone 培育成一件为了这样的时光而存在的工具。</div></div>
+    <p>“沉浸在喜欢的事里，回过神来已是凌晨四点半。”那是特别美好的夜晚，和美好一天的开始。</p>
+  </article>
+
+  <nav class="post-nav">
+    <a href="../index.html">← 回到首页</a>
+  </nav>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 采用 CC BY-NC-ND 4.0 许可，转载请注明出处</p>
+
+</div>
+
+<a href="#" id="toTop" aria-label="回到顶部">↑</a>
+
+<div class="lightbox" id="lightbox"><img alt=""></div>
+
+<script>
+(function () {
+  var toTop = document.getElementById('toTop');
+  function onScrollTop() {
+    if (window.scrollY > 600) toTop.classList.add('show');
+    else toTop.classList.remove('show');
+  }
+  document.addEventListener('scroll', onScrollTop, { passive: true });
+  onScrollTop();
+  toTop.addEventListener('click', function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 图片灯箱：点击放大，点周围模糊区域或按 Esc 关闭
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = lightbox.querySelector('img');
+  document.querySelectorAll('figure a[href*="/images/"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      lightboxImg.src = a.getAttribute('href');
+      lightboxImg.alt = a.querySelector('img').alt || '';
+      lightbox.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  lightbox.addEventListener('click', closeLightbox);
+  lightboxImg.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // 带翻译的引用：触屏设备点按切换（桌面端用 CSS :hover）
+  document.querySelectorAll('.qtrans').forEach(function (el) {
+    el.addEventListener('click', function () { el.classList.toggle('open'); });
+  });
+})();
+</script>
+</body>
+</html>
