@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于 ikarin · Chiyo</title>
+<meta name="description" content="OC 角色 ikarin 的设定页。">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --accent: #0e7490;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 13px; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .topbar { font-size: 0.85rem; margin-bottom: 48px; }
+  .topbar a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .topbar a:hover { color: var(--accent); }
+
+  .oc-header h1 {
+    margin: 0 0 18px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .oc-header .intro { font-size: 0.88rem; }
+  .oc-header .intro p { margin: 0.9em 0; }
+
+  section { margin-top: 56px; }
+  section h2 {
+    margin: 0 0 18px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 1.02rem;
+    font-weight: 600;
+  }
+  section p { margin: 1em 0; font-size: 0.95rem; }
+
+  ul.facts {
+    margin: 0;
+    padding-left: 1.4em;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  ul.facts li { margin: 0.35em 0; }
+
+  figure.photo { margin: 1.6em 0; text-align: center; }
+  figure.photo img {
+    max-width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  figure.photo a { border-bottom: none; line-height: 0; cursor: zoom-in; }
+  figure.photo a:hover img { opacity: 0.9; }
+  figcaption {
+    margin-top: 8px;
+    color: var(--faint);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+  .gallery {
+    margin: 1.6em 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .gallery a {
+    border-bottom: none;
+    line-height: 0;
+    cursor: zoom-in;
+  }
+  .gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: opacity .15s;
+  }
+  .gallery a:hover img { opacity: 0.85; }
+  .gallery a.span2 { grid-column: 1 / -1; }
+  @media (max-width: 640px) {
+    .gallery { grid-template-columns: 1fr; }
+  }
+  .note {
+    color: var(--faint);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  .post-nav {
+    margin: 56px 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+  .post-nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .post-nav a:hover { color: var(--accent); }
+
+  #toTop {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    font-size: 0.78rem;
+    color: var(--faint);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, color .15s, border-color .15s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; }
+  #toTop:hover { color: var(--accent); border-color: var(--accent); }
+
+  .copyright {
+    margin: 64px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 0.75rem;
+  }
+  .copyright a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s;
+    cursor: zoom-out;
+  }
+  .lightbox.show { opacity: 1; pointer-events: auto; }
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 90vh;
+    border-radius: 6px;
+    box-shadow: 0 12px 48px rgba(15, 23, 42, 0.35);
+    cursor: default;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar"><a href="../index.html">← 首页</a></div>
+
+  <header class="oc-header">
+    <h1>关于 ikarin</h1>
+    <div class="intro">
+      <p>喜欢玩游戏，尤其是 Splatoon。</p>
+      <p>喜欢各种各样的美食。</p>
+      <p>方向感一般。允许发呆浪费时间。如果你也愿意这样待着，那就太好了。</p>
+    </div>
+  </header>
+
+  <section id="base">
+    <h2>基础设定</h2>
+    <figure class="photo">
+      <a href="../images/oc/ikarin-base-color.jpg"><img src="../images/oc/ikarin-base-color.jpg" alt="ikarin 基础人设彩图：全身像、半身像与配色" style="width:520px" loading="lazy"></a>
+      <figcaption>基础人设彩图与配色</figcaption>
+    </figure>
+    <ul class="facts">
+      <li>黑色长发、齐刘海，灰蓝色眼睛</li>
+      <li>右侧黄绿色挂耳染，左耳戴同色鱿鱼耳坠</li>
+      <li>标准造型以黑色为主；需要长时间活动时会把长发编成双麻花辫</li>
+    </ul>
+  </section>
+
+  <section id="six-views">
+    <h2>标准造型 · 六视图</h2>
+    <figure class="photo">
+      <a href="../images/oc/ikarin-six-views.jpg"><img src="../images/oc/ikarin-six-views.jpg" alt="ikarin 标准造型完整六视图" loading="lazy"></a>
+      <figcaption>正面 / 左前 45° / 左侧 / 背面 / 右侧 / 右前 45°（点击放大）</figcaption>
+    </figure>
+  </section>
+
+  <section id="expressions">
+    <h2>表情基准</h2>
+    <figure class="photo">
+      <a href="../images/oc/ikarin-expressions.jpg"><img src="../images/oc/ikarin-expressions.jpg" alt="ikarin 表情六宫格：中性、浅笑、不悦、惊讶、困倦、认真" loading="lazy"></a>
+      <figcaption>中性 / 浅笑 / 不悦 / 惊讶 / 困倦 / 认真</figcaption>
+    </figure>
+  </section>
+
+  <section id="styles">
+    <h2>风格集</h2>
+    <div class="gallery">
+      <a href="../images/oc/ikarin-style-glasses-1.jpg"><img src="../images/oc/ikarin-style-glasses-1.jpg" alt="ikarin 模仿学习风格图一：圆眼镜与军绿色夹克" loading="lazy"></a>
+      <a href="../images/oc/ikarin-style-glasses-2.jpg"><img src="../images/oc/ikarin-style-glasses-2.jpg" alt="ikarin 模仿学习风格图二：扶眼镜" loading="lazy"></a>
+      <a href="../images/oc/ikarin-style-graffiti.jpg"><img src="../images/oc/ikarin-style-graffiti.jpg" alt="ikarin 涂鸦背景图：抱膝坐姿" loading="lazy"></a>
+      <a href="../images/oc/ikarin-style-buns.jpg"><img src="../images/oc/ikarin-style-buns.jpg" alt="ikarin 丸子头造型：格纹背带裙" loading="lazy"></a>
+      <a href="../images/oc/ikarin-style-gouache.jpg"><img src="../images/oc/ikarin-style-gouache.jpg" alt="ikarin 雾光水粉风格图：站台撑伞" loading="lazy"></a>
+      <a href="../images/oc/ikarin-style-yukata-2.jpg"><img src="../images/oc/ikarin-style-yukata-2.jpg" alt="ikarin 浴衣图二：湖畔夕阳" loading="lazy"></a>
+      <a class="span2" href="../images/oc/ikarin-style-yukata-1.jpg"><img src="../images/oc/ikarin-style-yukata-1.jpg" alt="ikarin 浴衣图一：湖边花火大会之夜" loading="lazy"></a>
+      <a class="span2" href="../images/oc/ikarin-style-train-1.jpg"><img src="../images/oc/ikarin-style-train-1.jpg" alt="ikarin 电车图一：黑衣贝雷帽，窗外富士山与落日" loading="lazy"></a>
+      <a class="span2" href="../images/oc/ikarin-style-train-2.jpg"><img src="../images/oc/ikarin-style-train-2.jpg" alt="ikarin 电车图二：白裙贝雷帽，窗外水族馆" loading="lazy"></a>
+      <a class="span2" href="../images/oc/ikarin-style-sheet.jpg"><img src="../images/oc/ikarin-style-sheet.jpg" alt="ikarin 造型设定图：黑色短裤西装三视图、特写与坐姿" loading="lazy"></a>
+      <a class="span2" href="../images/oc/ikarin-style-ink-gaming.jpg"><img src="../images/oc/ikarin-style-ink-gaming.jpg" alt="ikarin 线描图：盘腿打游戏的三个瞬间" loading="lazy"></a>
+    </div>
+  </section>
+
+  <nav class="post-nav">
+    <a href="../index.html">← 回到首页</a>
+  </nav>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · ikarin 的形象与本页全部图片保留所有权利<br>未经许可，禁止转载、公开发布（包括用作社交平台头像）及商业使用；保存为个人壁纸或私藏不在此限<br>欢迎非商业二次创作；完成后若能告知一声就更好了（欢迎在 X 上 <a href="https://x.com/Chiyo_memo_" target="_blank" rel="noopener">@Chiyo_memo_</a>）</p>
+
+</div>
+
+<a href="#" id="toTop" aria-label="回到顶部">↑</a>
+
+<div class="lightbox" id="lightbox"><img alt=""></div>
+
+<script>
+(function () {
+  var toTop = document.getElementById('toTop');
+  function onScrollTop() {
+    if (window.scrollY > 600) toTop.classList.add('show');
+    else toTop.classList.remove('show');
+  }
+  document.addEventListener('scroll', onScrollTop, { passive: true });
+  onScrollTop();
+  toTop.addEventListener('click', function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 图片灯箱：点击放大，点周围模糊区域或按 Esc 关闭
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = lightbox.querySelector('img');
+  document.querySelectorAll('figure a[href*="/images/"], .gallery a[href*="/images/"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      lightboxImg.src = a.getAttribute('href');
+      lightboxImg.alt = a.querySelector('img').alt || '';
+      lightbox.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  lightbox.addEventListener('click', closeLightbox);
+  lightboxImg.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+})();
+</script>
+</body>
+</html>
