@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>掉了一把斧头 · Chiyo</title>
+<meta name="description" content="AI 时代，狸要勇于许愿。">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --accent: #0e7490;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 14px; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .topbar { font-size: 0.85rem; margin-bottom: 48px; }
+  .topbar a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .topbar a:hover { color: var(--accent); }
+
+  .post-header h1 {
+    margin: 0 0 6px;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .post-header .date {
+    font-size: 0.78rem; color: var(--faint);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
+  }
+
+  article { margin-top: 40px; font-size: 0.95rem; }
+  article p { margin: 1.1em 0; }
+  figure.photo { margin: 0.8em 0; }
+  figure.photo a { border-bottom: none; line-height: 0; cursor: zoom-in; }
+  figure.photo a:hover img { opacity: 0.9; }
+  figure.photo img {
+    width: 90%;
+    max-width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .copyright {
+    margin: 64px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 0.75rem;
+  }
+  .post-nav {
+    margin: 56px 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+  .post-nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .post-nav a:hover { color: var(--accent); }
+  #toTop {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    font-size: 0.78rem;
+    color: var(--faint);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, color .15s, border-color .15s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; }
+  #toTop:hover { color: var(--accent); border-color: var(--accent); }
+  .copyright a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s;
+    cursor: zoom-out;
+  }
+  .lightbox.show { opacity: 1; pointer-events: auto; }
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 90vh;
+    border-radius: 6px;
+    box-shadow: 0 12px 48px rgba(15, 23, 42, 0.35);
+    cursor: default;
+  }
+  .lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(15, 23, 42, 0.35);
+    color: #fff;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .lb-nav:hover { background: rgba(15, 23, 42, 0.6); }
+  .lb-prev { left: 20px; }
+  .lb-next { right: 20px; }
+  .lb-nav.hidden { visibility: hidden; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar"><a href="../index.html">← 首页</a></div>
+
+  <header class="post-header">
+    <h1>掉了一把斧头</h1>
+    <div class="date">2026-09-20</div>
+  </header>
+
+  <article>
+    <figure class="photo"><a href="../images/axe-1.jpg"><img src="../images/axe-1.jpg" alt="河狸坐在湖边，水面泛起涟漪：我掉了一把斧头。……我故意的。让我发会儿呆。" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-2.jpg"><img src="../images/axe-2.jpg" alt="水中升起头顶光环的白色巨神：水里升上来一个神——头上顶着光环，大概是神吧。" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-3.jpg"><img src="../images/axe-3.jpg" alt="神一手金斧头一手银斧头：勤劳的同学啊，你掉的是这把 Claude Code 还是 Codex 还是……呢" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-4.jpg"><img src="../images/axe-4.jpg" alt="文字画面：一听就是个陷阱题。但 AI 时代，狸要勇于许愿。我掉的是这个 Claude Code。有了它，我将百倍提效。" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-5.jpg"><img src="../images/axe-5.jpg" alt="水面只剩涟漪：贪婪的狸类！不要用方便换安全！祂生气了，又回到了河里。" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-6.jpg"><img src="../images/axe-6.jpg" alt="河狸抱着鱼坐在石头上：不要着急，我听过这个传说。Claude Code 是金斧头，Codex 是银斧头。所以 Qoder 是正确选项。神啊，你回来吧，我知道错了。" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-7.jpg"><img src="../images/axe-7.jpg" alt="河狸对神说：我将以最诚实、最不绕弯子的方式告诉你，我掉的是 Qoder。神：……？" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-8.jpg"><img src="../images/axe-8.jpg" alt="河狸举着斧刃刻有小章鱼图案的木斧：谢谢谢…谢？" loading="lazy"></a></figure>
+    <figure class="photo"><a href="../images/axe-9.jpg"><img src="../images/axe-9.jpg" alt="河狸拿着斧头望着水面：我的神，这河狸吗。你有的选吗你。" loading="lazy"></a></figure>
+  </article>
+
+  <nav class="post-nav">
+    <a href="../index.html">← 回到首页</a>
+  </nav>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 采用 CC BY-NC-ND 4.0 许可，转载请注明出处</p>
+
+</div>
+
+<a href="#" id="toTop" aria-label="回到顶部">↑</a>
+
+<div class="lightbox" id="lightbox"><img alt=""><button class="lb-nav lb-prev" id="lbPrev" aria-label="上一张">‹</button><button class="lb-nav lb-next" id="lbNext" aria-label="下一张">›</button></div>
+
+<script>
+(function () {
+  var toTop = document.getElementById('toTop');
+  function onScrollTop() {
+    if (window.scrollY > 600) toTop.classList.add('show');
+    else toTop.classList.remove('show');
+  }
+  document.addEventListener('scroll', onScrollTop, { passive: true });
+  onScrollTop();
+  toTop.addEventListener('click', function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 图片灯箱：点击放大，左右方向键切换上一张/下一张，点模糊区域或 Esc 关闭
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = lightbox.querySelector('img');
+  var photoLinks = Array.prototype.slice.call(document.querySelectorAll('figure a[href*="/images/"]'));
+  var prevBtn = document.getElementById('lbPrev');
+  var nextBtn = document.getElementById('lbNext');
+  var current = -1;
+  function showAt(i) {
+    if (i < 0 || i >= photoLinks.length) return;
+    current = i;
+    var a = photoLinks[i];
+    lightboxImg.src = a.getAttribute('href');
+    lightboxImg.alt = a.querySelector('img').alt || '';
+    prevBtn.classList.toggle('hidden', i <= 0);
+    nextBtn.classList.toggle('hidden', i >= photoLinks.length - 1);
+    lightbox.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  photoLinks.forEach(function (a, i) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      showAt(i);
+    });
+  });
+  prevBtn.addEventListener('click', function (e) { e.stopPropagation(); showAt(current - 1); });
+  nextBtn.addEventListener('click', function (e) { e.stopPropagation(); showAt(current + 1); });
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    document.body.style.overflow = '';
+    current = -1;
+  }
+  lightbox.addEventListener('click', closeLightbox);
+  lightboxImg.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('show')) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft') showAt(current - 1);
+    else if (e.key === 'ArrowRight') showAt(current + 1);
+  });
+})();
+</script>
+</body>
+</html>
