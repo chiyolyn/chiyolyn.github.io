@@ -41,6 +41,36 @@
   .oc-header .intro { font-size: 0.88rem; }
   .oc-header .intro p { margin: 0.9em 0; }
 
+  /* 右侧大纲：仅宽屏显示 */
+  .toc {
+    position: fixed;
+    top: 120px;
+    left: calc(50% + 392px);
+    width: 200px;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+  }
+  .toc .toc-group {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+    margin-bottom: 6px;
+  }
+  .toc a {
+    display: block;
+    color: var(--faint);
+    text-decoration: none;
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid var(--border);
+    margin: 1px 0;
+    transition: color .15s, border-color .15s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a.active { color: var(--accent); border-left-color: var(--accent); }
+  @media (max-width: 1200px) { .toc { display: none; } }
+
   section { margin-top: 56px; }
   section h2 {
     margin: 0 0 18px;
@@ -171,6 +201,13 @@
 </style>
 </head>
 <body>
+<nav class="toc" id="toc">
+  <div class="toc-group">关于 ikarin</div>
+  <a href="#base">基础设定</a>
+  <a href="#six-views">标准造型 · 六视图</a>
+  <a href="#expressions">表情基准</a>
+  <a href="#styles">风格集</a>
+</nav>
 <div class="wrap">
 
   <div class="topbar"><a href="../index.html">← 首页</a></div>
@@ -244,6 +281,24 @@
 
 <script>
 (function () {
+  // 大纲滚动定位：高亮当前小节
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var tocMap = tocLinks.map(function (a) {
+    var el = document.getElementById(a.getAttribute('href').slice(1));
+    return { a: a, el: el };
+  }).filter(function (x) { return x.el; });
+  function onScrollToc() {
+    var current = null;
+    for (var i = 0; i < tocMap.length; i++) {
+      if (tocMap[i].el.getBoundingClientRect().top <= 120) current = tocMap[i];
+      else break;
+    }
+    tocLinks.forEach(function (a) { a.classList.remove('active'); });
+    if (current) current.a.classList.add('active');
+  }
+  document.addEventListener('scroll', onScrollToc, { passive: true });
+  onScrollToc();
+
   var toTop = document.getElementById('toTop');
   function onScrollTop() {
     if (window.scrollY > 600) toTop.classList.add('show');
