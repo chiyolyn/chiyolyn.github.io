@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>你无法真正理解没做过的事情 · Chiyo</title>
+<title>你无法真正理解没做过的事 · Chiyo</title>
 <meta name="keywords" content="Claude Code, Clawd, Artifacts, Claude Tag, 设计师, Meaghan Choi">
-<meta name="description" content="读 Meaghan Choi 播客（Dive Club 第 176 期：设计 Claude Code）：记录与全文译文。">
+<meta name="description" content="读 Claude Code 设计负责人 Meaghan Choi 的一期播客，附完整译文。">
 <style>
   :root {
     --bg: #f8fafc;
@@ -123,7 +123,8 @@
     color: var(--muted);
     font-size: 0.9rem;
   }
-  figure.photo { margin: 1.6em 0; }
+  figure.photo { margin: 1.6em 0; text-align: center; }
+  figure.photo a { border-bottom: none; line-height: 0; cursor: zoom-in; }
   figure.photo img {
     max-width: 100%;
     border-radius: 6px;
@@ -179,14 +180,60 @@
     border-bottom: 1px solid var(--border);
   }
   .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s;
+    cursor: zoom-out;
+  }
+  .lightbox.show { opacity: 1; pointer-events: auto; }
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 90vh;
+    border-radius: 6px;
+    box-shadow: 0 12px 48px rgba(15, 23, 42, 0.35);
+    cursor: default;
+  }
+  .lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(15, 23, 42, 0.35);
+    color: #fff;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .lb-nav:hover { background: rgba(15, 23, 42, 0.6); }
+  .lb-prev { left: 20px; }
+  .lb-next { right: 20px; }
+  .lb-nav.hidden { visibility: hidden; }
 </style>
 </head>
 <body>
 <nav class="toc" id="toc">
-  <div class="toc-group">记录</div>
-    <a href="#sec-1">什么时候值得打磨</a>
-    <a href="#sec-2">和 Agent 的分工</a>
-    <a href="#sec-3">来自真实的工作</a>
+  <div class="toc-group">导读</div>
+    <a href="#sec-1">1. CLI 的设计师</a>
+    <a href="#sec-2">2. 那个活在终端里的吉祥物</a>
+    <a href="#sec-3">3. 把真实工作做成产品</a>
+    <a href="#sec-4">4. 尽量不发明新 UI</a>
+    <a href="#sec-5">5. 维护质量：降低地板，抬高天花板</a>
+    <a href="#sec-6">6. 我们到底应该造什么</a>
+    <a href="#sec-7">7. 产品设计者</a>
   <div class="toc-group" style="margin-top:16px"><a href="#transcript">译文</a></div>
     <a href="#t-1">Meaghan 加入 Anthropic 的经过</a>
     <a href="#t-2">终端 UX 设计的独特之处</a>
@@ -210,62 +257,58 @@
   <div class="topbar"><a href="../index.html">← 首页</a></div>
 
   <header class="post-header">
-    <h1>你无法真正理解没做过的事情</h1>
-    <div class="date">2026-08-22</div>
+    <h1>你无法真正理解没做过的事</h1>
+    <div class="subtitle">读 Claude Code 设计师 Meaghan 访谈</div>
+    <div class="date">2026-11-09</div>
   </header>
 
   <article>
-    <blockquote>“<strong>我们是在为人们设计干活的工具。用户注意到工具的那一刻，就是我们失败的那一刻。</strong>”</blockquote>
-    <p>最近看了对 Claude Code 设计负责人 Meaghan Choi 的一期访谈，她提到了团队一位设计师的信条，如上。</p>
-    <p>想起几年以前，在一篇讲如何设计 to B 软件的博客，也读到过同样的观点，措辞没到“失败”这么重。</p>
-    <p>可以类比的还有话剧，如果在本该沉浸的当下你意识到“舞美好棒，音效好真”，反而说明可能有些出戏。</p>
-    <p>有的道理一直都在，无论是不是所谓的 AI 时代。</p>
-    <p>只是人难免有“发了狠忘了情”的时候——要么是因为搞创作，要么是为了做绩效。</p>
-    <div class="vspace"></div>
-    <p>说回这期对谈，兼具实用判断、幕后故事和锋利见解，推荐给对技术产品设计或对 Claude 感兴趣的朋友。</p>
-    <p>而这次特别想记下来的原因是，它还会微微刺痛我。</p>
-    <p class="note"><a href="#transcript">直达逐字稿翻译全文 →</a></p>
-    <h2 id="sec-1">什么时候值得打磨</h2>
-    <blockquote>“AI 应该是什么形态，这段旅程我们才走了 1%。所以知道什么时候需要工艺和打磨、什么时候你要验证的其实只是‘形态’本身，这一点非常重要。”</blockquote>
-    <blockquote>“你可能会发布或测试一个看起来很糟的东西，但你真正在测的是底层的‘产品形态心智模型’。而我觉得给那个东西抛光（打磨）并不值得。”</blockquote>
-    <p>这种道理好像早就知道，但我几乎从未这么做过。</p>
-    <p>在时间投入上，我有一种更表层的“用户决策法”：“这东西没人看”，“品质差了也没人在乎”，所以<strong>应该</strong>少投入一些精力。</p>
-    <p>而现实中我又很难执行。哪怕我知道不调对齐、换行也没关系；我看到丑东西也能发布；我知道技术访谈里不回溯信源、不事实核查、不加脚注也没人留意。</p>
-    <p>只是当你视野里出现那些瑕疵，无法放它过去。</p>
-    <p>这些年，“二八法则”我执行得很差。在有了 LLM / Agent 以后，可以把重复的工作交给它们，看似得到了一些缓冲。</p>
-    <p>这个问题怎么克服，或是不是一个应当被解决的问题…我要再领会一下 Meaghan 精神。</p>
-    <h2 id="sec-2">和 Agent 的分工</h2>
-    <blockquote>“我们把能自动化的部分自动化，好把时间省下来啃真正的设计思考硬题。”</blockquote>
-    <p>播客里 Meaghan 进一步谈到了她如何划分自己的工作，哪些让 Claude 做，哪些在 Slack 直接完成，哪些会去 Figma 上手。比如，“当我确定自己更快的时候才用它（Figma）”，以及“它（Claude）会自动把清理结果拿给我看，然后一口气给我开一堆 PR，我只要过一遍前后对比，试着合并就行”。</p>
-    <p class="note">Kimi 找到一个它觉得矛盾的地方，“如果你想让我严格按设计稿来，我也可以，但我认为我的做法更好。”“今天的 Claude 并不擅长告诉你‘你的想法本身就不对’。你让它做什么，它就执行什么。”</p>
-    <p class="note">不过读的时候我没注意到这点。可能因为我印象中 Claude 是一个顶级的执行者，它可以执行任何任务，包括我们理解中比较高级的、拥有“独立思想”的创造和判断，以及相对“低级”的执行。所以关键是，你想让它做什么，它判断“我的做法更好”同样基于某种设定好的价值观和世界观展开。</p>
-    <p>说回自动化，我的原则一直是“我不想做的且 Agent 能做的”，让它做。</p>
-    <p>我不会刻意“抽象提炼”自己的工作流。很多时候这种行动更像把工作强硬地塞进一个框里，这个框要么很大、留白很多，所以并不精准，要么很挤很勉强，所以必须裁掉细节，也不可能存在火花。最后跑出来的结果，既不如人意，也没提效多少。</p>
-    <p>以一份访谈为例，内容编辑需要准确理解受访者表达的原意，确保产出物没有曲解它，哪怕只是一点微妙的细节。最后，交付用户愿意看的内容——这一点模型比较擅长，但如果前面的步骤你只是一味“approve”，大概率会出现一些偏差。</p>
-    <p>优秀的编辑不会把审核和校对的责任转移到受访者本人身上，还应当适度补充一些信息，核对可能错漏的表达，让受访者的世界能和读者连接。</p>
-    <p>对比“全自动”Coding，这样做有点落后。关于写作攒了一些话，以后再说。</p>
-    <h2 id="sec-3">来自真实的工作</h2>
-    <p>前阵子做了一期对 Qoder 和 Q 仔开发者的访谈，有一位同事划线了其中一段，“如果每次开会都有个叫 Q 仔的数字员工，它也参加了会议”，并回复说，“真有数字员工的味道了”。</p>
-    <p>我又想起，在 Meaghan 描述中，Claude Tag 或者说组织里的那个 Claude 就是这样参与工作的：它存在于团队日常沟通的现场，知道不同频道里发生的事，也会主动提醒成员某项决定已经改变。</p>
-    <blockquote>“一边自己用、一边把它做出来，一边从使用中发现自己想要的功能，再把它做成产品。”</blockquote>
-    <p>这听起来很合理。当我们（其实是 Agent）能做的功能越来越多、开发成本越来越低，至少有一小群用户需要且喜欢，构成了一个产品的起点。</p>
-    <p>jing1meow 老师前几天也提到，Anthropic 发的这些产品，大多是他们自己真的这么用，而不是<strong>想象中应该这样用然后发布一个东西给你</strong>。</p>
-    <p>那连设计者、开发者自己都不爱用的生产力工具，还有做的价值吗？</p>
-    <div class="vspace"></div>
-    <p>最后一条笔记关于产品设计。</p>
-    <p>Meaghan 习惯从这三个角度考量：用户怎么认识它（心智模型），用户怎么和它交互（交互模型），以及它由哪些不可再拆分的原子组成。</p>
-    <p><strong>思考方式是一方面，能否找到答案又是另一方面</strong>——它同时基于“你对用户的了解”和“你对自己产品的了解与期待”，而这两项都很难直接通过推理和猜想获得。</p>
-    <p>你无法真正理解没做过的事情。</p>
-    <div class="vspace"></div>
-    <p>以下是播客逐字稿的译文。</p>
-    <hr>
-    <h2 id="transcript" style="margin-top:2.8em">播客逐字稿 · 译文</h2>
+    <p>你无法真正理解没做过的事。</p>
+    <p>这是一个很残忍的结论，但看完 Claude Code 设计师 Meaghan Choi 的一期访谈，这就是出现在我脑中的第一句话。</p>
+    <p>你无法在不真正使用某款产品的时候，想象着它的用法去评价它、模仿它、仿造它。</p>
+    <p>无法一边做着自己不爱用的生产力工具，一边想象着更多用户能多喜欢它。</p>
+    <p>也无法想象 Agent 到底会为工作带来什么，在给数字员工发工牌证书、设计离职流程的时候。</p>
+    <p>就像 Shopee 在晚点的一期访谈里说到，他们曾经论证在一个地区要以什么交通方式派送“最后一公里”——<strong>只要你站在当地街头，答案不需要论证，它就在那里</strong>。</p>
+    <p>这期访谈转译自 Dive Club：</p>
     <blockquote>主持人：Dive Club 主播 Ridd（Michael Riddering）。<br>
-对话嘉宾：Meaghan Choi，Anthropic Claude Code 和 Cowork 设计负责人；此前任职于 Cloudflare 和 Meta，专注开发者平台与新兴技术体验，2024 年底加入 Anthropic。<br>
-播出日期：2026 年 7 月 8 日｜时长：54 分钟<br>
-来源：<a href="https://www.dive.club/deep-dives/meaghan-choi" target="_blank" rel="noopener">https://www.dive.club/deep-dives/meaghan-choi</a></blockquote>
+对话嘉宾：Meaghan Choi，Anthropic Claude Code 和 Cowork 设计负责人；此前任职于 Cloudflare 和 Meta，专注开发者平台与新兴技术体验，2024 年底加入 Anthropic。</blockquote>
+    <p class="note"><a href="#transcript">直达逐字稿翻译全文 →</a></p>
+    <p>一些让人印象很深的片段：</p>
+    <h2 id="sec-1">1. CLI 的设计师</h2>
+    <p>“CLI 不需要设计师。”这是当时许多人的共识。然后 Meaghan 和经理说“我觉得这东西会火，我想兼职给它做设计。”故事就这样开始了。</p>
+    <p>CLI 里所有东西是一起往下滚的，没法像 GUI 那样滚回去或者跳回去，所以必须要考虑哪里显示状态、一次展示多少信息；键盘快捷键是重中之重，团队争论最凶的就是模式切换的快捷键设成什么。</p>
+    <p>当然，如果没有主动感知、对比和总结，你不会莫名其妙知道 CLI 的这些特性。</p>
+    <h2 id="sec-2">2. 那个活在终端里的吉祥物</h2>
+    <p>据称吉祥物 clawd 灵感来自 .nfo 文件年代那些艺术水准极高的 ASCII 画，这也是一种审美 taste。</p>
+    <p>它的存在，是为了让用户感觉到和 Claude 共事很愉快，“你和 Claude 一起待在电脑里”。</p>
+    <p>为每天都要合作的工具增加“温度”，是个容易想到的选择，更难的是把握雕花分寸。</p>
+    <h2 id="sec-3">3. 把真实工作做成产品</h2>
+    <p>“一开始我们根本不在乎名字和包装，我们在乎的是工作流。”</p>
+    <p>一边自己用、一边把它做出来，一边从使用中发现想要的功能，再把它做成产品。</p>
+    <h2 id="sec-4">4. 尽量不发明新 UI</h2>
+    <p>“我们仍然需要大量固定界面。”</p>
+    <p>现在 UI 可以分成两类：固定的（fixed），以及自适应的（adaptive）或者说非确定性的（non-deterministic）。举个例子，登录、账单、设置这类东西必须稳定，很多人也并不想要万物皆可定制。什么该固定、什么该自适应，是设计师自己要做的决定。</p>
+    <p>“我们尽量不发明新的 UI。我们希望它自然到成为你工作流里与生俱来的一部分。”</p>
+    <h2 id="sec-5">5. 维护质量：降低地板，抬高天花板</h2>
+    <p>让每个人都当一点“质量牧羊人”：教更多人判断“这个质量对不对”，或者让 Claude 通过自动化和设计系统文件去教。最成功的组织里，质量是所有人共有的。</p>
+    <h2 id="sec-6">6. 我们到底应该造什么</h2>
+    <p><strong>仅仅因为能被造出来，并不意味着它需要存在。</strong></p>
+    <p>现在造东西太容易了，所有人都在造所有东西。所以这是一件整个行业正在消化的大事：</p>
+    <p>你要有判断力去决定它值不值得造…甚至不是“值不值得造”，而是<strong>值不值得加进你的产品、发布出去。</strong></p>
+    <h2 id="sec-7">7. 产品设计者</h2>
+    <p>其一，保持极度开放的心态和好奇心，在混乱中找到一个起点往前走，持续更新自己对角色和产品的看法。</p>
+    <p>其二，判断力：<strong>什么该被造出来、怎样造才最契合你的产品和你的表达</strong>。</p>
+    <p>其三，<strong>对“交付”的全过程有完整的拥有感</strong>。</p>
+    <hr>
+    <p>这期对谈并不是狭义上的“设计师”视角，推荐给对技术产品设计或对 Claude 感兴趣的朋友。</p>
+    <p>Meaghan 习惯从这三个角度考量：用户怎么认识它（心智模型），用户怎么和它交互（交互模型），以及它由哪些不可再拆分的原子组成。</p>
+    <p>当然，<strong>思考方式是一方面，能否找到答案又是另一方面</strong>——它同时基于“你对用户的了解”和“你对自己产品的了解与期待”，而这两项都很难直接通过推理和猜想获得。</p>
+    <p>你无法真正理解没做过的事。</p>
+    <hr>
+    <h2 id="transcript" style="margin-top:2.8em">以下是播客逐字稿的译文。</h2>
+    <blockquote>来源：<a href="https://www.dive.club/deep-dives/meaghan-choi" target="_blank" rel="noopener">https://www.dive.club/deep-dives/meaghan-choi</a></blockquote>
     <blockquote>翻译：Kimi-K3<br>
-编校：Chiyo（非常粗略的，比工作不认真的，基于原话核对，略加译注，未做整合润色）</blockquote>
+编校：本人（粗略的，基于原话核对，略加译注，未做整合润色）</blockquote>
     <h3 id="t-1"><span class="time">[00:00:00]</span> Meaghan 加入 Anthropic 的经过</h3>
     <p><strong>Meaghan</strong>：我是 2024 年底加入的。那时候除了核心科技圈，几乎没人知道 Anthropic 是什么。当时所有人的注意力都在 ChatGPT 和 OpenAI 身上，而 Anthropic 主要是一家 API 公司，并没有真正的消费者业务。虽然有一个 Claude 应用，但它还没迎来起飞的时刻。</p>
     <p>所以我入职的时候，记得有人问我：“你要去哪儿？”我说：“哦，去 Anthropic。”</p>
@@ -274,7 +317,6 @@
     <p>但我记得当时看到那个演示，心想：我去，这也太酷了，我一定要试试。于是我去试了，还联系上了做演示的那几个人——Boris Cherny、Adam Wolff、Cat Wu 和内部其他几位同事。他们当时是一个实验性质的小组，组里没有设计师，因为他们觉得：“CLI 不需要设计师。”</p>
     <p>我记得我给经理发了条私信，说：“我觉得这东西会火，我想兼职给它做设计。”经理说：“行啊，去做吧。”事情就是这样开始的，然后我就再也没停下来。</p>
     <p><strong>主持人</strong>：我特别喜欢“CLI 根本不需要设计师”这个预设。说实话，哪怕一年半以前，我可能也是这个反应——当时确实看不出设计师能插在哪儿。那你最后是怎么切入的？在终端里做设计，你会去寻找哪些独特的挑战或机会？</p>
-    <div class="vspace"></div>
     <h3 id="t-2"><span class="time">[00:02:01]</span> 终端 UX 设计的独特之处</h3>
     <p><strong>Meaghan</strong>：我觉得终端设计里有大量“看不见的思考”，藏在做产品的背后。这一类能力正是我在 Anthropic 期待和招聘时看重的，也是<strong>长期以来产品设计师身上最被低估的品质（unsung hero）：心智模型、交互模型，以及那些构成“你如何理解自己正在与什么交互”的基础原语。</strong></p>
     <p class="note">译注：① 心智模型 the mental model，用户脑子里认为这个东西是什么。“A mental model is a model of what users know (or think they know) about a system。”源于认知心理学，由 Don Norman《设计心理学》带入设计领域。 ② 交互模型 the interaction model，用户与系统一来一回的方式；③ 基础原语 base primitives，构成整个交互的最小积木，系统底层最小、不可再拆分的基础操作/基础单元。</p>
@@ -296,11 +338,10 @@
     <p><strong>Meaghan</strong>：那个橙色框里的 Claude 吉祥物，可能是我为 Claude 体验设计过最开心的东西。可爱、好玩、超棒，而且它其实是 Claude 自己生成的，我觉得这个细节特别妙。我觉得从这些工具上感受到一点温度很重要，你不会想和它们相处得特别冷冰冰。而且 Claude 本身就有一种很独特的个性，在我看来这让和它共事变得很愉快，所以我很想把这种个性在视觉上呈现出来。我超爱 ASCII 艺术，太好玩了。软件开发史上有一段 .nfo 文件（信息文件）盛行的时期，如果你还记得的话，那时候你要下载各种……</p>
     <p>你得跑脚本去下载很多应用，而这些应用里常常会带一些艺术水准高到难以想象的 ASCII 画。当时我就想：“对，我要把这个带回我们的产品里，这会特别特别好玩。”我们还和品牌团队一起做了大量探索——你现在看到的所有背景、所有动画，都是为了营造一种“你和 Claude 一起待在电脑里”的世界感。</p>
     <p>这就是我们想要的感觉。</p>
-    <figure class="photo"><img src="../images/clawd-terminal.png" alt="Claude Code 终端里的 Clawd" loading="lazy"></figure>
+    <figure class="photo"><a href="../images/clawd-terminal.png"><img src="../images/clawd-terminal.png" alt="Claude Code 终端里的 ASCII 吉祥物 Clawd" loading="lazy"></a></figure>
     <p class="note">译注：结合 <a href="https://www.anthropic.com/features/making-of-claude-code" target="_blank" rel="noopener">https://www.anthropic.com/features/making-of-claude-code</a> 推测，Clawd 角色由 Sam 设计，终端的呈现由 Meaghan 设计。</p>
     <p><strong>主持人</strong>：这让我想起以前 AIM 的离开留言（away messages）。你玩过那个吗？我当年也干过一样的事——用字符块拼出滚动图案和各种小画。那里就像我的小家，就是我 AIM 离开留言里的一堆小点点。</p>
     <p class="note">译注：AIM 是 AOL 1997 年推出的即时通讯工具（已于 2017 年停运），其“离开留言”功能类似 QQ 的离线签名；因只支持纯文本，欧美网民当年常用 ASCII 字符拼画装点留言，与 CLI 里的字符艺术一脉相承。</p>
-    <div class="vspace"></div>
     <h3 id="t-3"><span class="time">[00:07:39]</span> 设计新版 Claude Artifacts</h3>
     <p><strong>主持人</strong>：好，我想继续深挖你作为设计师的日常——你现在亲手画图（原话 slinging pixels）的时间比我以前工作里少多了。另一个让我印象深刻的发布是 Artifacts。你仔细拆解就会发现：输入可以是任何东西，输出则完全是非确定性的。</p>
     <p>在这样的功能流程和发布里，设计的角色是什么？给我们讲讲 Artifacts 的幕后故事吧。</p>
@@ -406,7 +447,7 @@ Claude Code 团队有位设计师的信条说得极好：“<strong>我们是在
     <p><strong>Meaghan</strong>：然后我看着它，心想：“哎，要不要把这个特定设置项单独提出来？我觉得可能值得提出来。”这类就是我会和 Claude 讨论的问题：“你觉得我该这么做吗？”我其实也不确定，我就是在问它、一起搞清楚，而它能给我一个有理由的答案。因为那是被最高频触碰的控件之一——它从我们的数据里拉出来的——它说：“其实我认为你应该把它留在这儿，因为从使用模式看，这是用户常用的配置。”它知道这些，是因为它自己有权限访问我们所有的数据埋点日志。</p>
     <p>它给我拼了个原型让我点进去体验。我看了原型，把 PR 转成正式状态，确认 CI 通过，一切就绪，合并。</p>
     <p><strong>主持人</strong>：好，我有问题。第一个其实是：我知道肯定有人看到这里会想：“她这是把思考外包给模型了。我们都不思考了，模型想怎样就怎样，这也配叫设计？”你会对这种人说什么？</p>
-    <p><strong>Meaghan</strong>：现在有海量的设计工作要做，必须有人做。你看到的这些，恰恰是我认为可以外包出去的部分——因为模型现在的能力够了——这样我就能把时间花在那些真正棘手、需要深度设计思考的硬骨头上。我觉得我们正处在一个这样的时代——尤其如果你在实验室、或者已经全面拥抱这种高速交付节奏的公司——光是跟上正在发布的一切就已经很吃力了。</p>
+    <p><strong>Meaghan</strong>：现在有海量的设计工作要做，必须有人做。你看到的这些，恰恰是我认为可以外包出去的部分——因为模型现在的能力够了——这样我就能把时间花在那些真正棘手、需要深度设计思考的硬骨头上。<strong>我觉得我们正处在一个这样的时代——尤其如果你在实验室、或者已经全面拥抱这种高速交付节奏的公司——光是跟上正在发布的一切就已经很吃力了。</strong></p>
     <p>所以你看到的这几个例子，其实正是我“跟得上”的方式，也是 Anthropic 同事们跟得上的方式——我们把能自动化的部分自动化，好把时间省下来啃真正的设计思考硬题。</p>
     <p>比如一个真正的硬题是：怎么跟人解释“这是你们组织的 Claude”？它是你整个组织共用的同一个 Claude，不只是你个人的 Claude。人们会不会想在特定频道里要独立的访问方式？我们该怎么让他们配置这个，既保留“Claude 了解组织其余一切”的威力，又不触碰你们组织里明确设定的安全边界？</p>
     <p>我们怎么让你分清楚“以组织实体的身份给 Claude 授权”和“用你个人账号授权的 MCP”之间的区别？MCP 本身就已经够难懂的了，怎么把这个区分给你讲明白？这些才是我们花大量时间思考、不会外包的部分，因为它关乎“用户与模型的关系”和行为模式。</p>
@@ -414,7 +455,7 @@ Claude Code 团队有位设计师的信条说得极好：“<strong>我们是在
     <div class="vspace"></div>
     <h3 id="t-6"><span class="time">[00:31:17]</span> 用 AI 处理模糊的设计问题</h3>
     <p><strong>主持人</strong>：但你刚才说的那些设计工作、包括你自己内部的头脑风暴，很多也是在和模型来回对话中完成的，对吧？</p>
-    <p><strong>Meaghan</strong>：嗯哼。</p>
+    <p><strong>Meaghan</strong>：嗯。</p>
     <p><strong>主持人</strong>：好，那咱们聊聊这块。你提到了棘手问题，也提到了存在主义式对话。在我看来，你刚才展示的那些属于高度执行导向的工作，就是把所有 P3 级琐事批量清掉。我敢肯定很多听众对 AI 的使用就停留在这一层，他们还没往“怎么让 Claude 加速我在大方向上的思考”迈过步。我知道这种来回对话很难描述，但对那些完全没往这个方向走的人，<strong>能不能讲讲：当你和 Claude 一起攻克那些真正模糊、真正棘手的问题时，你的日常实践是什么样的？</strong></p>
     <p><strong>Meaghan</strong>：我觉得这有两层。第一层，从战术上讲，设计师正在学习一种技能——有人已经有了，有人还没有——它几乎是对传统设计角色认知的“反转”。传统上有很大一派观点认为：设计就是要把控一切的质量与打磨，所有东西都必须有质量、有打磨。</p>
     <p>我认为保持这一点很重要，但它不该占据你全部的时间。所以，知道什么时候该用这些工具做执行、做外包，什么时候该沉下去做“费脑的活儿”，这是一种技能。而我常见到人们用错的地方就是：你可能在让 Claude 做执行，其实你本该让它做的是前期思考——因为执行错了，执行的“形态”不对。</p>
@@ -473,24 +514,24 @@ Claude Code 团队有位设计师的信条说得极好：“<strong>我们是在
     <p>因为你刚才说的那些技能，同样适用于重度投入前端、打磨度极高的人。只是他们谈的东西更偏功能层面、纵向更深，而不是横向铺开。所以我还是认为那些特质很重要，只是取决于你处在产品生命周期的哪个位置、你选择锚定什么。但我会期待所有设计师都能在宏观和微观之间灵活切换，我认为这就是这个职业的方向。以前你可以只专精其中一头，现在的要求是你齐头并进。我们对你的技能期望变宽了。</p>
     <p><strong>主持人</strong>：好吧，论“好奇心”这个节目的标志性特质，你今天绝对给我——以及我敢肯定的一大群听众——留下了好几根可以拽的线头。所以非常感谢你来，Meaghan。你正在迅速成为我在这个行业里最喜欢学习的人之一。我先把话放这儿：我们肯定得再约一期——不知道隔多久，因为世界变化太快，总之非常感谢你今天来分享你在想什么、在造什么。</p>
     <p><strong>Meaghan</strong>：太好了，谢谢。我再补一句：如果说现在的设计行业有什么真正让我兴奋、驱使我走出来和大家对话的，那就是我很想让大家知道：我们还早得很。我们所有人此刻都有能力去塑造自己想要的东西。这正是令人兴奋的地方。所以，加入 Discord 讨论、亲手试这些东西、形成你自己的观点——这就是当下最好玩的部分，我们应该一起来。</p>
-    <div class="vspace"></div>
-    <p class="note">版权与来源说明：<br>本文的译文部分，是播客 Dive Club 第 176 期《Designing Claude Code (and what's coming next)》的中文翻译，原文及音频版权归 Dive Club 与主播 Michael Riddering（Ridd）所有。<br> 翻译仅供学习交流，不作商业用途。如有疏漏欢迎指正。若涉及版权问题，请联系删除。</p>
+    <p class="note">版权与来源说明：<br>本文的译文部分，是播客 Dive Club 第 176 期《Designing Claude Code (and what's coming next)》的中文翻译，原文及音频版权归 Dive Club 与主播 Michael Riddering（Ridd）所有。<br> 翻译仅供学习交流，不作商业用途。如有疏漏欢迎指正。</p>
   </article>
 
   <nav class="post-nav">
     <a href="../index.html">← 回到首页</a>
   </nav>
 
-  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 记录部分采用 CC BY-NC-ND 4.0 许可，转载请注明出处；播客原文及音频版权归 Dive Club 所有</p>
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 原创部分采用 CC BY-NC-ND 4.0 许可，转载请注明出处；播客原文及音频版权归 Dive Club 所有</p>
 
 </div>
 
 <a href="#" id="toTop" aria-label="回到顶部">↑</a>
 
+<div class="lightbox" id="lightbox"><img alt=""><button class="lb-nav lb-prev" id="lbPrev" aria-label="上一张">‹</button><button class="lb-nav lb-next" id="lbNext" aria-label="下一张">›</button></div>
+
 <script>
 (function () {
   var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
-  if (!links.length) return;
   var map = links.map(function (a) {
     var el = document.getElementById(a.getAttribute('href').slice(1));
     return { a: a, el: el };
@@ -517,6 +558,45 @@ Claude Code 团队有位设计师的信条说得极好：“<strong>我们是在
   toTop.addEventListener('click', function (e) {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = lightbox.querySelector('img');
+  var photoLinks = Array.prototype.slice.call(document.querySelectorAll('figure a[href*="/images/"]'));
+  var prevBtn = document.getElementById('lbPrev');
+  var nextBtn = document.getElementById('lbNext');
+  var current = -1;
+  function showAt(i) {
+    if (i < 0 || i >= photoLinks.length) return;
+    current = i;
+    var a = photoLinks[i];
+    lightboxImg.src = a.getAttribute('href');
+    lightboxImg.alt = a.querySelector('img').alt || '';
+    prevBtn.classList.toggle('hidden', i <= 0);
+    nextBtn.classList.toggle('hidden', i >= photoLinks.length - 1);
+    lightbox.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  photoLinks.forEach(function (a, i) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      showAt(i);
+    });
+  });
+  prevBtn.addEventListener('click', function (e) { e.stopPropagation(); showAt(current - 1); });
+  nextBtn.addEventListener('click', function (e) { e.stopPropagation(); showAt(current + 1); });
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    document.body.style.overflow = '';
+    current = -1;
+  }
+  lightbox.addEventListener('click', closeLightbox);
+  lightboxImg.addEventListener('click', function (e) { e.stopPropagation(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('show')) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft') showAt(current - 1);
+    else if (e.key === 'ArrowRight') showAt(current + 1);
   });
 })();
 </script>
