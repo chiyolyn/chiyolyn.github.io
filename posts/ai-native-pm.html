@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 原生产品经理应该做什么 · Chiyo</title>
+<meta name="keywords" content="Claude Code, Cowork, Cat Wu, Lenny's Podcast, 产品经理, AI 原生, Anthropic">
+<meta name="description" content="读 Anthropic Claude Code 产品负责人 Cat Wu 的 Lenny's Podcast 对谈，附完整译文。">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --faint: #94a3b8;
+    --accent: #0e7490;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 14px; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  .topbar { font-size: 0.85rem; margin-bottom: 48px; }
+  .topbar a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .topbar a:hover { color: var(--accent); }
+
+  .post-header h1 {
+    margin: 0 0 6px;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .post-header .subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+  .post-header .date {
+    font-size: 0.78rem; color: var(--faint);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
+  }
+
+  /* 右侧大纲：仅宽屏显示 */
+  .toc {
+    position: fixed;
+    top: 120px;
+    left: calc(50% + 352px);
+    width: 200px;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+  }
+  .toc .toc-group {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+    margin-bottom: 6px;
+  }
+  .toc .toc-group a {
+    color: inherit;
+    text-decoration: none;
+    border-left: none;
+    padding: 0;
+    margin: 0;
+    transition: color .15s;
+  }
+  .toc .toc-group a:hover,
+  .toc .toc-group a.active { color: var(--accent); }
+  .toc a {
+    display: block;
+    color: var(--faint);
+    text-decoration: none;
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid var(--border);
+    margin: 1px 0;
+    transition: color .15s, border-color .15s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a.active { color: var(--accent); border-left-color: var(--accent); }
+  @media (max-width: 1180px) { .toc { display: none; } }
+
+  article { margin-top: 40px; font-size: 0.95rem; }
+  article p { margin: 1.1em 0; }
+  article h2 { margin: 2.6em 0 0.6em; font-size: 1.08rem; font-weight: 700; }
+  article h3 { margin: 2.4em 0 0.6em; font-size: 1.0rem; font-weight: 700; }
+  article h3 .time {
+    color: var(--faint);
+    font-weight: 400;
+    font-size: 0.82em;
+    font-variant-numeric: tabular-nums;
+    margin-right: 2px;
+  }
+  article a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    word-break: break-all;
+  }
+  article a:hover { border-bottom-color: var(--accent); }
+  blockquote {
+    margin: 1.4em 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .vspace { height: 1.5em; }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.4em 0;
+  }
+  .note {
+    color: var(--faint);
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  /* 逐字稿：英文段落弱化，脚注为上标小字 */
+  article p.talk { margin: 0.9em 0; }
+  article p.en { color: var(--muted); font-size: 0.86rem; line-height: 1.75; }
+  article p.zh { color: var(--text); }
+  sup.fn { color: var(--faint); font-size: 0.72rem; padding: 0 1px; }
+
+  .copyright {
+    margin: 64px 0 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 0.75rem;
+  }
+  .post-nav {
+    margin: 56px 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+  .post-nav a { color: var(--muted); text-decoration: none; transition: color .15s; }
+  .post-nav a:hover { color: var(--accent); }
+  #toTop {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    font-size: 0.78rem;
+    color: var(--faint);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, color .15s, border-color .15s;
+  }
+  #toTop.show { opacity: 1; pointer-events: auto; }
+  #toTop:hover { color: var(--accent); border-color: var(--accent); }
+  .copyright a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .copyright a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="toc" id="toc">
+  <div class="toc-group">导读</div>
+    <a href="#sec-1">1. 让想法更快变成产品抵达用户</a>
+    <a href="#sec-2">2. 产品经理这个角色：Just do things</a>
+    <a href="#sec-3">3. 一个月后的产品长什么样</a>
+    <a href="#sec-4">4. 关于办公场景的一些产品</a>
+    <a href="#sec-5">5. 用不上的原型和 95% 的自动化，都没太多价值</a>
+  <div class="toc-group" style="margin-top:16px"><a href="#transcript">译文</a></div>
+    <a href="#t-1">开场：Claude Code 背后的产品负责人</a>
+    <a href="#t-2">「更快」是怎么做到的：流程、预期与 PRD</a>
+    <a href="#t-3">支线：源码泄露与 OpenClaw</a>
+    <a href="#t-4">Anthropic 的 PM 团队，和「人还剩下什么用」</a>
+    <a href="#t-5">高频发布的代价：牺牲产品一致性</a>
+    <a href="#t-6">Anthropic 为什么能后发先至：使命与聚焦</a>
+    <a href="#t-7">Claude Code、桌面版、Cowork：什么时候用哪个</a>
+    <a href="#t-8">Cowork 实践，与「个性化工作软件」的爆发</a>
+    <a href="#t-9">PM 的新技能：定义「一个月后的产品」</a>
+    <a href="#t-10">Claude 的性格</a>
+    <a href="#t-11">新模型来了，就拆「拐杖」</a>
+    <a href="#t-12">下一步：同时跑几百个 Claude</a>
+    <a href="#t-13">给正在焦虑的你</a>
+    <a href="#t-14">闪电问答</a>
+</nav>
+<div class="wrap">
+
+  <div class="topbar"><a href="../index.html">← 首页</a></div>
+
+  <header class="post-header">
+    <h1>AI 原生产品经理应该做什么？</h1>
+    <div class="subtitle">读 Cat Wu 和 Lenny 的对谈</div>
+    <div class="date">2026-11-22</div>
+  </header>
+
+  <article>
+    <p>在 AI 原生产品上做得好的产品经理，有怎样的特质？</p>
+    <p>时任 Anthropic Claude Code 与 Cowork 产品负责人 Cat Wu 的回答是，<strong>想清楚「怎么缩短从想法到用户手里的时间」，并定义清楚「我的产品里哪些任务必须开箱即用」</strong>。</p>
+    <p>下文整理和转译自 Lenny's Podcast。这期对话里的许多行动，马上就能参考。但渐渐我又意识到，达成某些结果好像不源于单个极度卓越的个体，而来自一个优秀的、以某种方式联结的组织。</p>
+    <blockquote>Lenny's Podcast 主持人：Lenny Rachitsky<br>
+对话嘉宾：<strong>Cat Wu</strong>，2024 年 8 月加入 Anthropic，访谈时任 Anthropic Claude Code 与 Cowork 产品负责人（Head of Product）。2026 年 11 月，Cat Wu 官宣加入 OpenAI，担任 Core Products 的产品管理负责人（lead product management for Core Products）。</blockquote>
+    <p class="note">注：Core Products 团队覆盖 ChatGPT、Codex、API 和 agent 基础设施，可以大概理解为 OpenAI 版「Claude Code + API 平台」。</p>
+    <p><a href="#transcript">直达逐字稿翻译全文 →</a></p>
+    <div class="vspace"></div>
+    <p>一些印象深的片段，以及 TL;DR 如下：</p>
+    <h2 id="sec-1">1. 让想法更快变成产品抵达用户</h2>
+    <p>Cat 多次提到「更快」，并认为流程和团队预期比用什么模型更影响发布速度：<strong>我们想消除发布路上的一切障碍，想让团队里的每个人都觉得有能力把一个想法从「只是个想法」推到「上线」</strong>，一周以内搞定，有时候甚至一天。</p>
+    <p>如何「更快」？设定清晰的目标；建立可复用的发布流程；搭建跨团队的协作框架，降低发布流程的摩擦。</p>
+    <p>Cat 说，永远有无数风险和棘手局面——<strong>你要是对每件事都过度焦虑，很快就会 burnout</strong>。</p>
+    <blockquote>这会很难，但我很兴奋要去搞定它；我会尽全力，我知道自己不会完美，但我能安心睡觉，因为我尽力了。</blockquote>
+    <blockquote>「研究预览」（research preview）这类形式能降低产品发布早期新功能的心理负担。</blockquote>
+    <blockquote>以前发一个带 bug 的功能会让我睡不着觉；现在我能与它共处了，因为我知道：我们会很快拿到反馈，下个版本就修掉。</blockquote>
+    <p>所以一定要做到的是：<strong>让想法快速上线抵达用户，并让它回来时带着答案</strong>。</p>
+    <p>Cat Wu 团队有严格的指标体系，每周和团队复盘；有一份「团队原则」清单。</p>
+    <blockquote>我们把这些都写明白，是为了让团队里每个人都觉得自己理解这个业务是怎么运转的，知道什么对我们是重要的、我们愿意做什么样的取舍。<strong>这样每个人就能自己做决策</strong>，而不会觉得自己被 PM 或其他干系人卡住。</blockquote>
+    <p>放到更大的维度，则是「把使命（把安全的 AGI 带给全人类）放在任何单一产品线之上」，所以能更快地在全公司范围内做决策，然后统一执行。</p>
+    <h2 id="sec-2">2. 产品经理这个角色：Just do things</h2>
+    <p>Cat Wu 的团队构成：PM 几乎都当过工程师，或真的在 Claude Code 提交代码；设计师以前都是前端工程师。Cat 自己也是工程师出身，加入 Anthropic 之前短暂做过 VC。</p>
+    <blockquote><strong>工程背景之所以特别有用，是因为你对「一件事应该有多难」有更好的直觉，而这常常是决定做什么的因素</strong>。如果一件事很简单，与其开会争论，不如花一小时直接做掉；但如果一件事很难，你事先就知道团队要付出多大代价才能把它发出去。这对排优先级很有帮助。</blockquote>
+    <blockquote>工作正变得越来越无固定形态，一个优秀的 PM 要能看清所有的缺口、判断哪些优先级最高，然后想明白：「我是该去学这项技能，还是用我现有的技能来解决这个挑战。」现在的环境奖励的是那种能戴很多顶帽子、随时换帽子、而且对「自己该干什么活」没有自我包袱的人。</blockquote>
+    <blockquote>我甚至觉得「岗位」这个东西是虚的。如果你理解约束条件，就能想明白自己能做什么，然后就尽快去做；做错了就从中学习、道歉或者修好它。<strong>Just do things.</strong></blockquote>
+    <p>「这种构成能帮团队在工程师中建立信任，也让团队跑得更快。」不知道国内大厂的朋友们怎么看。人在其位，似乎更容易觉得自己对这个领域更专业；或出于某种职场规则，人不得不遵守自身角色的发言与行动边界。有工程师背景的 PM 会更容易在 dev 团队中建立信任，还是仍然无法打破团队之间的围栏？是先有这样的「环境和奖励」，还是先有这样「没包袱的人」？</p>
+    <h2 id="sec-3">3. 一个月后的产品长什么样</h2>
+    <p>Cat 说，最难的技能是：<strong>能定义「一个月后产品应该长什么样」</strong>。</p>
+    <blockquote>为「超级 AGI 模型」做产品其实很容易；难的是为「当下的模型」做产品。</blockquote>
+    <p>她的建议是：其一，<strong>花大量时间用模型</strong>，对「模型为什么做了那个决定」保持好奇，就能看清是什么误导了它，<strong>接着修 harness、把这个缺口补上</strong>；其二，<strong>找到那些你最信任、能对模型给出准确反馈的用户</strong>；其三，<strong>写 evals</strong>。</p>
+    <blockquote> 做一些「现在还不见得能跑通」的产品其实非常重要——这样你才知道差在哪。等新模型来了，直接把它换进你早就做好的原型里，看看新模型能不能把这个差距补上。</blockquote>
+    <p>谈到有哪些东西是为了更大的好处（例如「更快」）而主动牺牲的，Cat Wu 的回答是「产品一致性」。</p>
+    <blockquote>现在 AI 跑得太快，要验证的想法太多，我们有时确实会做出互相重叠的功能——很多时候是因为内部有两种我们都喜欢的形态，想让外部用户来告诉我们哪个更好。但对新用户来说，这意味着他可能搞不清「要做成 X 这件事，最佳路径是哪条」。</blockquote>
+    <p>所以 Cat 认为还需要继续做的，是<strong>让用户少点「被放在一条越跑越快的跑步机上」的感觉</strong>。「希望用户能觉得：打开工具就行，工具自己会教我需要知道的东西，让我感觉自己是被带着往前走的。」这也呼应了开头提到的，定义清楚「产品里哪些任务必须开箱即用」。</p>
+    <p>几乎每一份关于产品的访谈，都会提到产品品味（product taste）。Cat 理解为「决定写什么」：<strong>判断哪些值得做、正确的做法是什么，需要非常多的用心和品味</strong>。</p>
+    <h2 id="sec-4">4. 关于办公场景的一些产品</h2>
+    <p>Cat Wu 和 Lenny 都认为 Slack 是重要的通信基础设施。</p>
+    <blockquote>Anthropic 整个公司跑在 Slack 上——它差不多是我们公司的操作系统。</blockquote>
+    <p>如果你刚开始用 Cowork，<strong>第一件要做的事是把跟你角色相关的数据源全部接上</strong>——Cowork 只有拿到它需要的全部上下文，才能帮你组织出好的结果。</p>
+    <p>Cat Wu 也提到，Claude Code 让做任何定制应用的门槛变低，所以可以在公司里看到一波「个性化工作软件」的爆发——大家为特定场景自己造工具，而不是去凑合用那些不完全合身的现成软件。</p>
+    <h2 id="sec-5">5. 用不上的原型和 95% 的自动化，都没太多价值</h2>
+    <p>大部分人的工作中有两部分：热爱的创造性部分，深恶痛绝的繁琐部分。尽量让 AI 完成后者。</p>
+    <blockquote>找出那些可以交给 Claude 的重复性工作，把自动化打磨到成功率非常高，然后把精力放到「我还能为团队、为产品、为公司多做什么」上。</blockquote>
+    <p>Cat Wu 说，一个 95% 的自动化没多大价值，因为<strong>最后那 5% 到 10% 更花时间</strong>。</p>
+    <blockquote>我见过一些用户做自动化，做到 90%、95% 的准确率就放弃了。但如果一个自动化不是 100% 可靠，它就算不上真正的自动化。要打磨到「它真的 100% 都能跑对」。</blockquote>
+    <p>与其用 AI 搭原型应用、折腾工作流，不如试试做那种「你自己真的每天都在用」的应用。<strong>如果你做的原型应用并不能帮你多干活，那 AI 就没有真的给你的每一天增加价值</strong>。</p>
+    <p>Just do things.</p>
+    <div class="vspace"></div>
+    <hr>
+    <p id="transcript"><strong>以下是播客逐字稿的译文。</strong></p>
+    <blockquote>节目：Cat Wu：How Anthropic's Product Team Moves Faster Than Anyone Else - Lenny's Podcast（2026 年 4 月）<br>
+来源：<a href="https://www.youtube.com/watch?v=PplmzlgE0kg" target="_blank" rel="noopener">https://www.youtube.com/watch?v=PplmzlgE0kg</a></blockquote>
+    <blockquote>翻译：Kimi-K3、K3.1<br>
+编校：Chiyo<br>
+注：Lenny 的频道推广与本集赞助商广告未收录。全文的 PM = Product Manager，产品经理。</blockquote>
+    <h3 id="t-1"><span class="time">[0:32]</span> 开场：Claude Code 背后的产品负责人</h3>
+    <p><strong>Lenny</strong>：今天的嘉宾是 Cat Wu，Anthropic 旗下 Claude Code 和 Cowork 的产品负责人。Cat 正站在 AI、产品与构建方式这场变革的中心，她和她的团队正在打造那个最能改变我们所有人做产品方式的产品。她的洞察和心法非常多，这期节目绝对不能错过。Cat，欢迎来到节目。</p>
+    <p><strong>Cat Wu</strong>：谢谢邀请。</p>
+    <p><strong>Lenny</strong>：我有一肚子问题。你能来我真的太兴奋了。我想先让大家理解一下你和 Boris<sup class="fn">[1]</sup> 是怎么分工的。Boris 大家都认识——他上我那期是本播客有史以来播放量第一的一期（没别的意思，不给你压力）。他创造了 Claude Code，带着团队，一天能从手机上提交无数个 PR。说真的，我觉得 Claude Code 的成功、Cowork 以及你们做的一切，外界给你的认可还不够。帮我们理解一下：你在团队里的角色是什么？你和 Boris 怎么配合、怎么分工？Claude Code 团队上的 PM 到底长什么样？</p>
+    <p class="note">[1] <strong>Boris</strong>：Boris Cherny，Claude Code 的创建者兼技术负责人（tech lead）。</p>
+    <p><strong>Cat Wu</strong>：能和 Boris 共事我觉得自己很幸运。他是特别好的思想伙伴。他是我们的技术负责人，更是产品的愿景家——他非常擅长定方向：三个月、六个月后产品应该是什么样，那个「完全 AGI 信念版<sup class="fn">[2]</sup>」（the AGI-pilled version）的产品是什么样。<br>
+而我很大一部分职责是想清楚：从今天到那个三到六个月后的愿景，路径是什么。我花在跨职能协同上的时间更多：确保市场、销售、财务、算力容量等等团队都认同计划、往同一个方向划桨，确保功能一旦 ready，发布路上没有任何障碍。<br>
+我觉得我们合作得好，很大程度上是因为我们像「心灵融合」（mind-meld<sup class="fn">[3]</sup>）一样默契——但分工的界限其实出奇地模糊。大概 80% 的事我们想得一模一样，然后有 20% 是我更在乎、我来推进，还有 20% 是他更在乎、他来推。</p>
+    <p class="note">[2] <strong>AGI-pilled</strong>：硅谷圈流行语，源自「red-pilled」（《黑客帝国》梗），指一个人对 AGI 会很快到来的信念程度。「剂量刚刚好」指既不盲目乐观也不保守。</p>
+    <p class="note">[3] <strong>mind-meld</strong>：源自《星际迷航》中瓦肯人的「心灵融合」，此处形容两个人想法高度同步、像共用一个大脑。</p>
+    <h3 id="t-2"><span class="time">[3:20]</span> 「更快」是怎么做到的：流程、预期与 PRD</h3>
+    <p><strong>Lenny</strong>：好，正式开始前你跟我分享过一件事：你在不停地面试几百个 PM。要是每次有人找我内推 Anthropic 的 PM 岗位我都能拿五美分，我现在都有 300 亿 ARR 了。Anthropic 就是大家最想去的地方，没有之一。所以我完全能想象你面试了多少 PM。你还跟我说，你看到很多人的做法——不对，是他们理解「怎样才能成为成功的 AI 产品经理」的方式就错了。聊聊你看到了什么，以及今天想成功到底需要什么。</p>
+    <p><strong>Cat Wu</strong>：我觉得在 AI 之前，技术变革的节奏慢得多，所以你可以按 6 到 12 个月的周期做规划。因为发功能的速度慢，所以工作的重心更多是跟各个合作团队协调——确保他们发布的功能能为你的功能解除阻塞、打通依赖，因为那时候代码很昂贵。<br>
+而现在，有了 AI，工程被极大加速，模型能力提升飞快，我们很多产品功能的交付周期从 6 个月降到 1 个月，有时候 1 周甚至 1 天。这就意味着我们必须确保产品发得飞快。对 PM 来说，这意味着：少花点心思去跟合作团队对齐那种跨好几个季度的路线图，多花心思去想——怎么才能最快把东西发出去？怎么才能搭出一块「概念试验角」，让工程师或 PM 有了想法，一周内就能送到用户手里？<strong>我认为在 AI 原生产品上做得最好的 PM，是那些能想清楚「怎么缩短从想法到用户手里的时间」、并且能定义清楚「我的产品里哪些任务必须开箱即用」的人</strong>。</p>
+    <p><strong>Lenny</strong>：我喜欢你这个说法的地方在于：大家还没真正理解自己需要跑多快，以及现在这个工作有多大一部分就是「帮团队跑快」。那具体怎么做？你平时做什么？除了能用上最先进的模型之外，你们的 PM 团队做了什么来帮助团队这么快？</p>
+    <p><strong>Cat Wu</strong>：我觉得第一件事是设定清晰的目标。因为 LLM 太通用了，这会带来很大的模糊性：我们在为谁构建？要解决什么问题？最高优先级的使用场景是什么？一个好的 PM 要能明确说出来：「我们的核心用户是专业开发者。这个功能要解决的主要问题是权限弹窗太多、用户已经弹窗疲劳了。场景是：我们要让企业里的专业开发者能安全地做到零权限弹窗。」这就定出了一个非常清晰的目标，因为它排除了大量「减少权限弹窗」的其他可能方案，让团队知道该往哪打。<br>
+第二件重要的事是建立一个可复用的发布流程。在 Claude Code，我们几乎所有功能都以「研究预览」（research preview<sup class="fn">[4]</sup>）的形式发布。发布时我们会清楚地标注，让用户知道这是早期产品、只是一个想法，是我们想收集反馈、持续迭代的东西，未来不保证一直维护。这降低了我们发布一个东西的心理负担——一两周内就能把东西发出去。<br>
+第三件事，PM 要帮团队搭好协作框架，让大家知道什么时候该拉跨职能伙伴进来、以及对这些伙伴的预期是什么。比如我们工程、市场和文档团队之间有一套非常紧的流程：工程师觉得某个功能 ready 了、内部也自己用过（dogfooding<sup class="fn">[5]</sup>）了，就把它发到我们的「常青发布频道」（evergreen launch room）里，然后负责文档的 Sarah、负责产品营销的 Alex，还有 DevRel<sup class="fn">[6]</sup> 的 Tar 和 Lydia 就会接棒，第二天就能把市场发布物料做出来。正因为有这套紧凑的流程，任何工程师发布东西的摩擦都很低——而搭建这套流程正是 PM 这个角色该干的事。</p>
+    <p class="note">[4] <strong>research preview</strong>：比正式版更早、更实验性的发布通道，功能可能不稳定，用于收集真实用户反馈。</p>
+    <p class="note">[5] <strong>dogfooding</strong>：「吃自己的狗粮」，指公司员工日常使用自家产品来发现问题。</p>
+    <p class="note">[6] <strong>DevRel</strong>：Developer Relations，开发者关系，负责面向开发者社区的布道、文档和反馈收集。</p>
+    <p><strong>Lenny</strong>：PRD<sup class="fn">[7]</sup> 在这里面是什么位置？你说目标非常重要——要对齐「成功长什么样」「这是为谁做的」「不是为谁做的」。那你们还写 PRD 吗？还是就列几个要点？在 AI 时代这件事是怎么演变的？</p>
+    <p class="note">[7] <strong>PRD</strong>：Product Requirements Document，产品需求文档。</p>
+    <p><strong>Cat Wu</strong>：我们做两件事。第一，我们有非常严格的指标体系，每周和整个团队一起做指标复盘。目的是确保每个人都深度理解我们业务的方方面面：核心目标是什么、趋势怎么走、是什么在驱动它们。第二，我们有一份「团队原则」清单，里面包括我们的核心用户是谁、为什么是他们。我们把这些都写明白，是为了让团队里每个人都觉得自己理解这个业务是怎么运转的，知道什么对我们是重要的、我们愿意做什么样的取舍。这样每个人就能自己做决策，而不会觉得自己被 PM 或其他干系人卡住。</p>
+    <p><strong>Lenny</strong>：我很喜欢你说的这些——说到底还是「未来依然需要 PM」。现在到处都在说「还要 PM 干嘛？直接让工程师发布和构建就行了」。</p>
+    <p><strong>Cat Wu</strong>：哦，我们其实还是写 PRD 的。对于那些方向特别模糊的功能，写一页纸确实有帮助：目标是什么、让人愉悦的使用场景是什么、目前有哪些需要修复的失败模式。另外偶尔也有一些项目——尤其是重基础设施的——确实要花好几个月，这些情况下我们还是会写 PRD。</p>
+    <p><strong>Lenny</strong>：我想再深挖一下你们怎么能跑得这么快。我从没见过 Anthropic 这种发布节奏——有人做了一张 Anthropic 的发布日历， literally 每天都有重要功能或产品上线。网上很多人问的一个问题是：你们最近搞出了一个叫 Mythos 的模型，还在预览阶段，因为它太强了，大家有点怕它能做的事。你们自己是不是已经在用了？这是不是你们能跑这么快的部分原因？</p>
+    <p><strong>Cat Wu</strong>：我们已经连续好几个季度跑得很快了，所以这不能完全归功于 Mythos。Mythos 是一个极其强大的模型，我们内部确实在用自家模型，我觉得这对发布速度有一点提升，但它解释不了提升的大头。我认为大头在于流程和团队预期。我们的流程极轻：<strong>我们想消除发布路上的一切障碍，想让团队里的每个人都觉得有能力把一个想法从「只是个想法」推到「上线」，一周以内搞定，有时候甚至一天</strong>。</p>
+    <p><strong>Lenny</strong>：太强了。一边有最好的模型，一边还在做产品，这是什么神仙优势。</p>
+    <p><strong>Cat Wu</strong>：能和最前沿的模型共事，我们确实很幸运。</p>
+    <h3 id="t-3"><span class="time">[11:41]</span> 支线：源码泄露与 OpenClaw</h3>
+    <p><strong>Lenny</strong>：天呐，这优势太夸张了——做出一个东西，然后自己用它，然后加速得更快。太有意思了。我还想问几件「支线任务」式的事。Anthropic 最近动作太多了，我特别想听听你的看法。第一件：大概一周前，Claude Code 的整个源代码泄露了，被人传到了外面，似乎是有人犯了错。你能评论一下吗？发生了什么？哪里出了问题？大家该知道什么？</p>
+    <p><strong>Cat Wu</strong>：我们看到之后立刻做了调查。结论是人为失误：一位同事用 Claude 辅助写 PR，那是一个关于我们发布包流程的更新，而且它其实经过了两层人工审核。所以这纯粹是人为失误，我们已经在流程上做了加固，确保这类事不再发生。</p>
+    <p><strong>Lenny</strong>：这个人还在 Anthropic 吗？他现在还好吗？</p>
+    <p><strong>Cat Wu</strong>：在的，在的。这是一次流程上的失败，最重要的是从中学习、加上更多防护栏，让它不再发生。这一直是我们专注做的事，大部分加固措施已经上线了。</p>
+    <p><strong>Lenny</strong>：好。另一个问题是 OpenClaw<sup class="fn">[8]</sup>。最近你们开始限制人们用 Claude 订阅额度去跑 OpenClaw，大家反应很激烈，也很困惑为什么会这样，感觉这对开源社区造成了伤害。大家需要理解什么？这个决定背后的考量是什么？</p>
+    <p class="note">[8] <strong>OpenClaw</strong>：第三方开源项目（社区也常称「Claw」），让用户把 Claude 订阅额度用于自建的 agent 框架。2026 年初 Anthropic 限制了这种用法，引发开源社区争议，即本段讨论的事件。</p>
+    <p><strong>Cat Wu</strong>：我们看到对 Claude 的需求非常大，一直在拼命做两件事：扩基础设施，以及让我们的 harness<sup class="fn">[9]</sup>更省 token，让同样的额度能用得更多。订阅额度的设计初衷并不是给第三方产品用的，第三方产品的使用模式和我们自家产品很不一样。我们花了很长时间想给出最平滑的过渡方案，所以我很高兴我们能给每位订阅用户都补偿了一些额度。但没错，我们确实做了那个艰难的决定：必须优先保障我们自己的第一方产品和 API。这个决定就是这么来的。</p>
+    <p class="note">[9] <strong>harness</strong>：包裹在模型外面的那层工程脚手架——提示词、工具定义、循环逻辑等——让模型变成能干活的 agent。</p>
+    <p><strong>Lenny</strong>：嗯，这事我完全理解。你们等于在用每月 200 美元的订阅价补贴这种近乎无限量的使用。我觉得很多人不理解：公司是要赚钱的。你们毕竟是要盈利的——算力这么抢手，不能白送。我完全理解。</p>
+    <h3 id="t-4"><span class="time">[14:14]</span> Anthropic 的 PM 团队，和「人还剩下什么用」</h3>
+    <p><strong>Lenny</strong>：回到产品经理团队的话题：Anthropic 的 PM 团队长什么样？有多少 PM？是怎么组织的？</p>
+    <p><strong>Cat Wu</strong>：我们有几个 PM 团队，现在大概三四十个 PM。一个是 Diane 带的研究侧 PM 团队，负责收集客户对模型的所有反馈，喂给对应的研究团队去改进，也负责护航模型发布。<br>
+一个是 Claude 开发者平台团队，维护 Claude Code 所依赖的那些 API，也发布 managed agents 这类产品——你构建自己的 agent，我们帮你托管。<br>
+然后是 Claude Code 团队，同时负责 Claude Code 和 Cowork 两个核心产品。还有企业版团队，让企业客户更容易采用 Claude Code 和 Cowork——从成本控制、RBAC<sup class="fn">[10]</sup>、安全管控，到确保这些企业用得放心。<br>
+最后我们还有增长团队，负责整个产品线的增长，我们在 Claude Code 和 Cowork 的增长上跟他们紧密合作，他们也跟其他团队一起做 CDP（Claude 开发者平台）的增长，也就是用 Claude API 的那批用户的增长。</p>
+    <p class="note">[10] <strong>RBAC</strong>：Role-Based Access Control，基于角色的访问控制，企业软件里的权限管理体系。</p>
+    <p><strong>Lenny</strong>：说到增长，Amol<sup class="fn">[11]</sup> 刚上过我的播客，他有个很有意思、但没什么人说过的观点。大家都觉得未来需要更少的 PM——为什么还要 PM？工程师直接发产品不就行了。他的看法相反：正因为工程师跑得太快，PM 和设计师反而被挤压了——每天都有新功能上线，根本没时间跟上所有事。所以他的结论是他需要更多 PM，因为没人跟得上。你怎么看？PM 的招聘会增加吗？长期看 PM 这个职业会怎样？</p>
+    <p class="note">[11] <strong>Amol</strong>：Amol Sarva，Node 创始人，此前上过 Lenny 的播客。</p>
+    <p><strong>Cat Wu</strong>：我觉得所有角色都在融合：PM 在干工程活，工程师在做 PM 的事，设计师既当 PM 也提交代码。你要么多招一些有极强产品品味的工程师，要么工程师编制不变、多招 PM 来引导他们的工作。我们团队比较专注在招「有产品品味的工程师」，这样能把发布任何产品的协作开销降到最低。我们团队里很多工程师可以完全端到端地做一件事：周一在 Twitter 上看到用户反馈，周五就把功能发出去了，中间几乎不需要产品侧参与。我觉得这其实是最高效的发布方式。所以工程师和 PM 确实在重叠，哪边多招都有收益。产品品味（product taste）仍然是非常稀缺的能力，只要一个人充分证明了自己有，我们基本都会招。</p>
+    <p><strong>Lenny</strong>：你自己就是工程背景出身，对吧？</p>
+    <p><strong>Cat Wu</strong>：对，我做了很多年工程师，加入 Anthropic 之前还短暂做过 VC。实际上我们团队的 PM 几乎都当过工程师，或者在 Claude Code 这边真的在提交代码——我觉得这一点很能帮我们在团队里建立信任，也让我们跑得更快。而且我们的设计师以前也都是前端工程师。</p>
+    <p><strong>Lenny</strong>：哇，这正是那个大问题——角色确实在融合——工程、产品、设计这几个圆圈，正像维恩图一样重叠到一起。很多人想问的是：如果你是工程、产品或设计出身，哪项核心技能会最值钱？在 Anthropic、在 Claude Code，我能看出工程能力很值钱。我好奇的是在其他公司，设计背景转 PM 是不是更吃香？</p>
+    <p><strong>Cat Wu</strong>：我还是觉得归根结底是产品品味（product taste）。写代码的成本越来越低，更值钱的就是「决定写什么」：这个功能的正确 UX 是什么？用户体验它最愉悦的方式是什么？我们的 GitHub 上躺着几万个 issue，天南海北什么需求都有，要判断哪些值得做、正确的做法是什么，需要非常多的用心和品味。这种能力可以来自任何背景，但它是目前最重要的东西。<br>
+工程背景之所以特别有用——至少在接下来几个月——是因为你对「一件事应该有多难」有更好的直觉，而这常常是决定做什么的因素。如果一件事很简单，与其开会争论，不如花一小时直接做掉；但如果一件事很难，你事先就知道团队要付出多大代价才能把它发出去。这对排优先级很有帮助。</p>
+    <p><strong>Lenny</strong>：你说「至少在接下来几个月」，是因为接下来几个月模型可能会强到——你根本不需要再有这种难度直觉了？</p>
+    <p><strong>Cat Wu</strong>：我觉得「值钱的技能组合」本身变化得就很频繁，超过几个月的事情很难预测。所以我不是在预言具体会发生什么转变，而是在说：大的转变一定会发生。</p>
+    <p><strong>Lenny</strong>：所以你不是说「等 Mythos 发布，一切都会改变，大家就不用懂工程了」。</p>
+    <p><strong>Cat Wu</strong>：对，我只是说每隔几个月编程能力就会有一次大跃升，随之改变的是其他角色的价值。<br>
+我认为最重要的是有第一性原理思维<sup class="fn">[12]</sup>：看清技术格局正在怎么变、团队真正需要你做什么，然后跳进去把那个缺口补上。因为工作正变得越来越无固定形态，一个优秀的 PM 要能看清所有的缺口、判断哪些优先级最高，然后想明白：「我是该去学这项技能，还是用我现有的技能来解决这个挑战。」<br>
+所以现在的环境奖励的是那种能戴很多顶帽子、随时换帽子、而且对「自己该干什么活」没有自我包袱的人——只要能让团队跑得更快。</p>
+    <p class="note">[12] <strong>第一性原理思维</strong>（first principles thinking）：不从惯例和类比出发，而是回到最基本的约束和事实重新推导解决方案的思考方式。</p>
+    <p><strong>Lenny</strong>：我喜欢这个回答。我一直在问站在你这个位置上的人——那些处在 AI 能力最前沿、用最新工具构建产品的人——一个问题：在到达超级智能之前，人类大脑还会在哪些地方长期有用、不可或缺？从你刚才说的，我听到的是：选择做什么、判断市场走向、决定优先级；然后是判断做出来的东西好不好、对不对，并以某种早期形态把它推出去。我理解得对吗？至少在未来几个月内，人类大脑还有哪些地方会持续有用？</p>
+    <p><strong>Cat Wu</strong>：我觉得人类仍然提供了一种模型不具备的常识。任何一次产品发布都有一千个活动部件，有些很小，但出错的点永远很多。模型并不总是能很好地感知：所有的利益相关方是谁、他们之间什么关系、各自的偏好是什么、用什么合适的场合和方式跟他们沟通、让他们持续支持。这类更偏隐性常识、偏情商的知识，现在仍然非常值钱。当然我们希望模型在这方面变强，我觉得它们会的，但眼下差距还在。</p>
+    <p><strong>Lenny</strong>：作为一个身处其中的人，你怎么应对这种持续不断的剧变？你就在龙卷风的风眼里——也许风眼反而是平静的——你是怎么跟上所有事情的？在这一路狂奔的疯狂里，你是怎么保持心态不失衡的？</p>
+    <p><strong>Cat Wu</strong>：我觉得我们团队全是主动拥抱混乱的人。我们尽量笑着面对每一个挑战，因为永远有无数事情在同时发生，永远有无数风险和棘手局面——你要是对每件事都过度焦虑，很快就会 burnout。所以我们招人时特别看重一种特质：看到挑战时想的是「这会很难，但我很兴奋要去搞定它；我会尽全力，我知道自己不会完美，但我能安心睡觉，因为我尽力了」。</p>
+    <p><strong>Lenny</strong>：这算是对「未来什么技能重要」的一个有趣回答。我忘了是谁说的——可能是 Ben Mann<sup class="fn">[13]</sup>——「今天是这个世界往后最正常的一天」。</p>
+    <p class="note">[13] <strong>Ben Mann</strong>：Anthropic 联合创始人之一。</p>
+    <p><strong>Cat Wu</strong>：对，确实只会越来越难。经常有这样的周：周日晚上冒出一个 P0<sup class="fn">[14]</sup>，周一早上又来一个，周一下午直接升级成 P0000，你回头一看：「天，我周日居然为那个 P0 那么焦虑。」但你必须承认：你能做的就这么多，你得睡好觉，第二天才能做出好决策，然后极度无情地排优先级——什么事是必须要做对的？剩下的就学会放手。我们发布的产品里，有些没有我希望的那么精致。但我们的头号目标是赋能专业开发者，只要一个功能不阻塞核心场景，没做好也没关系——我们会收到反馈，下个版本修。以前发一个带 bug 的功能会让我睡不着觉；现在我能与它共处了，因为我知道：我们会很快拿到反馈，下个版本就修掉。</p>
+    <p class="note">[14] <strong>P0</strong>：优先级最高的事故/任务分级（Priority 0，线上严重故障级别）；「P0000」是夸张说法，形容紧急程度层层升级。</p>
+    <p><strong>Lenny</strong>：我脑子里浮现的是一张动图——好像出自《加勒比海盗》——一个人顺着船上的楼梯往下走，整条船在他周围散架，他却淡定得不行，就这么溜达下来。有意思的是，我见过的 Anthropic 每个人都这么松弛、这么乐观。这本身就是个很有意思的洞察：用平静和乐观面对，而不是「天呐一切都疯了我也要疯了」。</p>
+    <p><strong>Cat Wu</strong>：对，没有这种心态的话很容易 burnout。我们招人也比较偏向在行业里待过一段时间、经历过大起大落的人——他们清楚什么能给自己充电，也知道怎么长期维持能量。这一点帮了我们很多。</p>
+    <h3 id="t-5"><span class="time">[23:23]</span> 高频发布的代价：牺牲产品一致性</h3>
+    <p><strong>Lenny</strong>：太有意思了。我接着问角色模糊化这件事：工程师在变成 PM，所有人都是所有人。在这个世界里，我们失去了什么？会不会失去职业阶梯和清晰的晋升路径？会不会牺牲设计一致性、代码质量？肯定是有代价的。你觉得有哪些东西是你们「为了更大的好处而主动牺牲」的？</p>
+    <p><strong>Cat Wu</strong>：我们牺牲的是产品一致性。以前写代码很贵，你会精心规划整个产品线：每个产品之间什么关系、各自的场景是什么、怎么集成，基本上一个场景对应一个产品。<strong>现在 AI 跑得太快，要验证的想法太多，我们有时确实会做出互相重叠的功能——很多时候是因为内部有两种我们都喜欢的形态，想让外部用户来告诉我们哪个更好</strong>。但对新用户来说，这意味着他可能搞不清「要做成 X 这件事，最佳路径是哪条」。我们需要做更多用户教育，帮大家理解核心功能是什么、最佳实践是什么。我觉得这就是高频发布的代价。用户也觉得跟不上最新动态：传统产品一个月或一个季度发一个功能，用户很容易跟上——一个月看一次就行，半年不看也不觉得错过什么。而这些 agent 工具——不只是 Claude Code 和 Cowork，整个生态都是——让人觉得必须每天刷 Twitter 才能知道最新发生了什么。我觉得我们还能做更多事，让大家少点「被放在一条越跑越快的跑步机上」的感觉。我特别希望用户能觉得：打开工具就行，工具自己会教我需要知道的东西，让我感觉自己是被带着往前走的。</p>
+    <p><strong>Lenny</strong>：对，我看到你们前几天发了个很有意思的功能，好像是 /powerup——带你过一遍 Claude Code 所有很酷的用法和最佳实践。就是出于这种考虑吗？</p>
+    <p><strong>Cat Wu</strong>：完全正确。我们以前其实不想做 PowerUp 这类东西——我们的原则是产品应该足够直观，不需要教程。但后来我们意识到，功能实在太多了，用户对一个内置的新手引导需求太强，于是我们稍微偏离了「绝不做 onboarding 流程」的原始原则，加了这个功能。因为太多用户想知道：「100 个功能里，哪 10 个是我必须用的？」所以我们做了这个东西。</p>
+    <h3 id="t-6"><span class="time">[28:32]</span> Anthropic 为什么能后发先至：使命与聚焦</h3>
+    <p><strong>Lenny</strong>：这真是个魔幻的世界。而且 Anthropic 在 B2B 企业市场做得非常成功——按传统，2B 不该这么高频发东西，可能一个季度发布一次，跟「每天都有新东西」完全相反。顺着这条线说：Anthropic 这波增长简直不像这个星球的。它起步时远远落后——融资最少的那批公司之一，没有分发渠道，也不是先发者，OpenAI 遥遥领先，当时看起来 Anthropic 根本没机会在长期竞争中立足。现在它却在碾压那些大公司，ARR 大概 110 亿美元、月增长率高得吓人——等这期节目播出时数字估计又涨了。身在内部，你觉得是哪几个关键成分让 Anthropic 能这么成功、后发先至？</p>
+    <p><strong>Cat Wu</strong>：最重要的有两件事。第一是统一的使命——很难形容它有多重要。我们招的人，最在乎的都是「把安全的 AGI 带给全人类」。在决定整个产品组织该集中发布什么的时候，我们真的频繁引用这个使命。因为我们把使命放在任何单一产品线之上，所以能非常快地在全公司范围内做决策，然后统一执行。在我们这种规模的公司里，我没见过别家能做到这一点。</p>
+    <p><strong>Lenny</strong>：确认一下我理解对了：头号使命就是安全与对齐，确保 AI 对世界有益。你的意思是，只要有这么一个清晰的使命，决策就会容易很多？</p>
+    <p><strong>Cat Wu</strong>：对。当两个优先级打架时，我们会讨论哪个对 Anthropic 的使命更重要，这样选哪个就容易多了，而且定了之后所有人都会站在统一决定后面。所以有时这意味着：我们本来想在 Claude Code 上发个东西，但另一件事更重要，那就把它往后排，以后再发。</p>
+    <p><strong>Lenny</strong>：这点很有意思，也算是替我回答了——对比另一家名字可能跟 OpenAI 押韵的公司（就是 OpenAI），他们什么都做；而我从你这里听到的本质是：你们不打算做社交网络，也不打算做有趣内容的信息流，因为不符合这个使命。正是这种专注，看起来成了 Anthropic 成功的核心要素之一。</p>
+    <p><strong>Cat Wu</strong>：嗯，当我想起使命，我想的是把 Anthropic 的目标放在任何个人、任何团队、任何单一产品之前。所以我觉得我们擅长的第二件事是聚焦。使命对我而言更具体的含义是：团队愿意为了 Anthropic 的目标和 KR，做出损害自己团队目标和 KR 的牺牲，而且大家心甘情愿做这种取舍。举个极端的例子：如果 Claude Code 失败了、但 Anthropic 成功了，我会非常开心——整个团队都愿意按这个逻辑做决策。</p>
+    <p><strong>Lenny</strong>：不知道这个你能讲多深：OpenClaw 那个决定是不是也源于这套逻辑——「这对 Anthropic 的使命没有推动作用，而且它的运行方式不是我们希望的样子」？</p>
+    <p><strong>Cat Wu</strong>：对 Anthropic 来说，最重要的事情之一是扩大我们能触达的用户数。实现方式之一就是第一方产品的 Claude 订阅，所以我们非常想全力投入——但这有时确实要以第三方产品为代价。</p>
+    <h3 id="t-7"><span class="time">[31:58]</span> Claude Code、桌面版、Cowork：什么时候用哪个</h3>
+    <p><strong>Lenny</strong>：好，我们聊了 Claude、Cowork 这些产品。我想让大家真正搞明白，也好奇你自己是怎么用的：有 Claude Code，有 Claude 桌面版和网页版，有 Cowork——什么时候用哪个，最好的理解方式是什么？</p>
+    <p><strong>Cat Wu</strong>：我在终端里用 Claude Code，主要是发起一次性的编码任务、并且想用所有最新功能的时候。CLI 是我们最初的产品形态，新功能往往也最先落在上面，所以它是所有工具里最强的。一次想跑一个或少数几个任务时，我就用它。桌面版在需要前端工作的场景里特别好用：我特别喜欢预览功能——做网页应用时我会在桌面版里开着右侧预览窗格，一边跟 Claude 聊天一边实时看到网页的变化。它也更适合喜欢图形界面的人：终端对非技术背景的人来说很陌生——弹出一堆吓人的授权弹窗，也没法像其他产品那样点点点。很多人就是不喜欢终端，如果你是这种人，我强烈推荐试试桌面版。桌面版还适合做全局总览：你可以在里面看到 CLI 终端会话、其他桌面会话、以及从网页和手机上发起的会话——它是个一站式控制台。网页和移动端的好处是可以随时随地发起任务：CLI 和桌面版都要求你在自己的笔记本前，但这很受限——有时你在外面（touching grass<sup class="fn">[15]</sup>）、散步，没开电脑。我都数不清见过多少人在外面举着开着的笔记本、用手机热点联网。这说明我们缺一个解决这个需求的产品。所以对我来说，移动端的意义就是让你在外面也能发起任务，不用到哪都背着开着的笔记本。</p>
+    <p class="note">[15] <strong>touching grass</strong>：网络流行语，字面「摸摸草」，指离开屏幕出门接触真实世界。</p>
+    <p><strong>Lenny</strong>：我太喜欢这个画面了。我见过有人在飞机上这样——现在都成梗了：「我得让这个 agent 跑完，不能关机，我需要 Wi-Fi。」</p>
+    <p><strong>Cat Wu</strong>：至于 Cowork，它填的位置是：每个人做的很多工作，产出物不是代码。比如把 Slack 未读清零、收件箱清零；比如为即将到来的客户会议做幻灯片；比如写一份关于某个功能的目标或发布计划的快速文档。这些任务的产出都不是代码，而这正是 Cowork 最擅长的。所以我在脑子里的划分很简单：产出是代码，就用 Claude Code（终端、桌面或移动端）；产出是代码以外的任何东西，就用 Cowork。</p>
+    <h3 id="t-8"><span class="time">[35:48]</span> Cowork 实践，与「个性化工作软件」的爆发</h3>
+    <p><strong>Lenny</strong>：大家其实都低估了 Cowork 的成功——它增长得飞快，但很多人还没搞懂它是干嘛的。能不能结合你自己的 PM 工作，给我们举几个使用场景？有没有特别有意思、甚至出人意料的用法，帮你省时间、干更多活？</p>
+    <p><strong>Cat Wu</strong>：如果你刚开始用 Cowork，<strong>第一件要做的事是把跟你角色相关的数据源全部接上——Cowork 只有拿到它需要的全部上下文，才能帮你组织出好的结果</strong>。对我来说就是接上 Google 日历、Slack、Gmail、Google Drive，让它能灵活地找相关上下文、提问、拉出对话串——这会显著提升产出质量。举个昨晚的例子：我们马上要办 Code with Claude 大会<sup class="fn">[16]</sup>，我有几个演讲，其中一个讲的是 Claude Code 从「助手」到「完整 agent」的转变。我想在演讲里展示我们为促成这个转变发布的所有产品，并找出内部同事的成功案例做演示。我已经连好了 Drive 和 Slack；我们的产品市场同事 Alex 整理了一份他觉得该覆盖的要点草稿。我把这些全喂给 Cowork，告诉它我想讲的叙事主线，然后它自己跑了一个小时：它翻了我们 Twitter 上的发布记录，翻了我们的常驻发布频道，还翻了 Claude Code 公告频道（团队在里面晒自己用 Claude Code 用得最爽的演示），把所有这些综合成了一份 20 页的 deck。我早上起来读了一遍——相当不错。有几处要改，我给了一轮反馈——我喜欢幻灯片字极少，它写得偏多了——但这已经比我自己做快太多了。而且因为 Cowork 能访问我们整套设计系统，成品看起来就像 Anthropic 设计师做的，视觉上非常精致。这类事效率提升太明显了：这份 deck 我自己做得花好几个小时，现在它产出一个相当好的草稿，我就能把精力放在打磨塞进去的演示上。</p>
+    <p class="note">[16] <strong>Code with Claude 大会</strong>：Anthropic 面向开发者的年度技术大会。</p>
+    <p><strong>Lenny</strong>：这对 PM 来说简直是梦想成真——拼 deck 实在太烦人了。</p>
+    <p><strong>Cat Wu</strong>：而且特别慢。</p>
+    <p><strong>Lenny</strong>：而且等你演讲的时候，大家会亲眼看到这份 deck——当然它会是你迭代过的版本，不是一稿直出的。那帮大家拆解一下，好让他们自己试试：第一步是连接……你刚才说的，Slack。还建议连什么？</p>
+    <p><strong>Cat Wu</strong>：Slack、Google 日历、Gmail、Google Drive。原则就是：把你的沟通工具连上，再把你存放「事实源」数据的地方连上——那些记录着你团队关心什么、你关心什么、你在做什么的地方。</p>
+    <p><strong>Lenny</strong>：好。那你生成这份 deck 时，提示词大概是怎么写的？</p>
+    <p><strong>Cat Wu</strong>：我写的是：「帮我做一份 Code with Claude 大会的演讲 deck。这是我们 PMM<sup class="fn">[17]</sup> 建议覆盖的内容。这是我自己手工做的、但我不满意的草稿——链接给你。能不能先给我一份带细节的提纲？另外，注意别跟那场更重要的 keynote 演讲撞车。」然后 Claude 读了我发给它的所有链接，产出了一份建议提纲。我通读它的提案和它列出的各种选题方向，然后拍板定最终 deck 里到底放什么。我觉得这正好说明了今天 PM 的角色是什么：Claude 是个极好的头脑风暴伙伴，能飞快地综合海量信息、把所有可能性摆在你面前；但 PM 的角色仍然是做最终决策——成品里到底该放什么。这次我定的叙事线是：从「让本地任务成功」到「让每个 PR 全绿（通过所有检查）」再到「帮工程师合入更多 PR」的演进过程，每一环配哪个演示最有说服力。大纲定了之后，Cowork 自己跑了几个小时，把整份幻灯片做了出来。</p>
+    <p class="note">[17] <strong>PMM</strong>：Product Marketing Manager，产品市场经理，负责产品定位、发布材料和市场叙事。</p>
+    <p><strong>Lenny</strong>：这太棒了——工作里居然有这么一大块可以不用再干了。感觉就像在跟一个 deck 设计师对话，而且这个设计师还真的了解你做过的东西，能把内容做成你想要的样子，而不只是做得好看。设计系统那部分你是怎么弄的？它怎么知道 Anthropic 的设计系统？</p>
+    <p><strong>Cat Wu</strong>：其实很简单：我们本来就有一份对外场合统一使用的标准化 deck 模板，我把它开放给 Claude 了。这样它就能看到我们用什么颜色、什么字体、都有哪些幻灯片版式——里面有大约 20 页示例页。</p>
+    <p><strong>Lenny</strong>：懂了。所以就是你上传「这是我们的模板，照着做」。</p>
+    <p><strong>Cat Wu</strong>：对。如果你的幻灯片版式存在 Figma 里，也可以接 Figma 的 MCP<sup class="fn">[18]</sup>，它能直接拉取。</p>
+    <p class="note">[18] <strong>MCP</strong>：Model Context Protocol，Anthropic 主导的开放协议，让 AI 模型以标准方式连接外部工具和数据源（如此处的 Figma）。</p>
+    <p><strong>Lenny</strong>：顺着这个问一个我一直好奇的问题：你作为 PM 的工具栈里都有什么？显然是 Claude Code、Cowork 这些 Anthropic 全家桶。还有别的吗？你提到 Slack，还有呢？</p>
+    <p><strong>Cat Wu</strong>：我的栈基本就是 Claude Code 加 Cowork。Anthropic 整个公司跑在 Slack 上——它差不多是我们公司的操作系统。日常里我大概 30% 的时间在试探 Cowork 的能力边界，这样我能非常清楚地知道我们哪里做得不好；我也花很多时间跟模型「对话」，搞懂它为什么会犯那些错。另外我们内部自建了很多工具。我觉得 Claude Code 给全公司解锁的一件事就是：做任何定制应用的门槛被拉得极低。所以我们看到一波「个性化工作软件」的爆发——大家为特定场景自己造工具，而不是去凑合用那些不完全合身的现成软件。</p>
+    <p><strong>Lenny</strong>：多讲讲。有什么例子？你或者别人造的、特别受欢迎又好用的东西？</p>
+    <p><strong>Cat Wu</strong>：Claude Code 团队有个销售，他发现自己在一遍又一遍地做重复的客户 deck。于是他自己做了个网页应用：内置了我们验证过效果好的几套核心 Claude Code 演示（比如入门版、进阶版、「精通 Claude Code」版），然后可以输入具体客户上下文——从 Salesforce、Gong<sup class="fn">[19]</sup>、其他笔记里自动拉取——为每个客户定制 deck。比如它会识别出：这个客户在通过 Bedrock 或 Vertex<sup class="fn">[20]</sup> 使用我们、还是在用 Claude 企业版或 Console——这决定了他能用哪些功能；它发现这个客户关心软件研发生命周期里的代码评审环节，就加一页我们代码评审功能的介绍；它发现这个客户需要满足 HIPAA<sup class="fn">[21]</sup> 合规或某些安全管控，就往 deck 里加一两页相关内容。反过来，如果这个客户走的是 Vertex 或 Bedrock、不打算用 Claude 企业版，就把那些企业版专属功能的页面删掉。以前这是手工活，一份要花二三十分钟——所以销售要么花时间做，要么干脆不做、拿通用版凑合。现在几秒钟就产出一份量身定制的 deck。</p>
+    <p class="note">[19] <strong>Gong</strong>：销售对话智能平台，自动录制和分析销售电话、提取客户信息。</p>
+    <p class="note">[20] <strong>Bedrock / Vertex</strong>：亚马逊 AWS 和谷歌云上的模型托管平台，企业可通过它们调用 Claude；与 Anthropic 自家企业版是不同的采购路径，可用功能有差异。</p>
+    <p class="note">[21] <strong>HIPAA</strong>：美国《健康保险流通与责任法案》，处理医疗数据必须满足的合规要求。</p>
+    <p><strong>Lenny</strong>：有意思的是 Slack 这个东西——没人想自己造一个，Slack 一直在赢，就像你说的，它是那么多公司的操作系统。大家都在说「SaaS 已死，我们不需要 SaaS 了，自己造」，但 Slack 就是那个没人想去挑战、没人想造个更好版本的持久型工具。</p>
+    <p><strong>Cat Wu</strong>：对。我觉得它是非常重要的通讯基础设施，他们把「帮所有人实时获取更新」这件核心的事做得极好。</p>
+    <p><strong>Lenny</strong>：是啊。大家嘴上吐槽 Slack，但它在自己要做的事上真的很强，最前沿的团队都离不开它。很有意思。</p>
+    <p><strong>Cat Wu</strong>：对，而且我特别喜欢他们把它做得那么好定制。我们很爱做各种 Slack 机器人——这种可折腾性意味着我们可以按自己想要的方式跟 Slack 集成。这点上真的很感谢 Slack 的工作。</p>
+    <p><strong>Lenny</strong>：（笑）该去买点 CRM（Salesforce 的股票代码）股票了。</p>
+    <p><strong>Lenny</strong>：回到正题：你讲了各个团队怎么用 Claude Code 和 Cowork 来运转。除了工程团队——我猜工程是 token 消耗大户，如果不是那反而更有意思——现在 token 消耗排第二的职能是哪个？</p>
+    <p><strong>Cat Wu</strong>：哦，applied AI 团队在把 Claude Code 和 Cowork 的能力边界往外推这件事上做得非常出色。他们很多时间泡在客户那里，帮客户落地我们的 API，有时还会替客户做原型——Claude Code 让这件事比以前快太多了。他们同时还要处理大量的客户沟通：客户主动找上门的需求、历史上下文、会议纪要。所以他们既是 Cowork 的重度用户，也是 Claude Code 的重度用户。</p>
+    <p><strong>Lenny</strong>：解释一下 applied AI 这个团队——是不是类似于「前向部署工程师」（forward deployed engineer<sup class="fn">[22]</sup>）那种角色？大多数人会怎么描述他们的工作？</p>
+    <p class="note">[22] <strong>forward deployed engineer（前向部署工程师）</strong>：由 Palantir 带火的角色，工程师直接驻场到客户处，用自家平台帮客户落地解决方案。</p>
+    <p><strong>Cat Wu</strong>：对，就是帮客户在他们整个公司落地我们最新的 API 和模型能力——既用于支撑客户自己的产品，也用于客户内部的提效。</p>
+    <p><strong>Lenny</strong>：懂了。所以有点像客户成功加 GTM，偏前向部署工程师那种。</p>
+    <p><strong>Cat Wu</strong>：没错，就是技术性很强的 GTM 角色。</p>
+    <p><strong>Lenny</strong>：明白了。所以他们可能就是 token 消耗第二大的部门。</p>
+    <p><strong>Cat Wu</strong>：对。而且我们也能看到他们在拓展 Cowork 的用法。这些人每人覆盖多个客户，忙的时候一天有 5 到 10 场客户会议。所以他们经常在前一天晚上让 Cowork 汇总：明天有哪些客户会？这个客户之前提过哪些需求？他们现在最关心什么？历次会议的行动项是什么？Cowork 会整理出一份「档案式」的简报，告诉他们进会场前需要知道的一切。Cowork 还能帮忙查答案：客户问「X 功能什么时候上线」，Cowork 可以帮他们在 Slack 里搜到最新的预计时间，加进笔记里，保证开会时手里是最新信息。这些工作流都是大家自己搭的，然后在团队内互相分享。</p>
+    <p><strong>Lenny</strong>：太酷了。最近有个话题很火：「token 开销超过人的工资」——用 AI 花的钱比这人挣的还多。Anthropic 内部有没有流传什么数字？比如工程师、PM 每人每天或每月烧多少 token？</p>
+    <p><strong>Cat Wu</strong>：我们看到一个很明确的规律：模型越强，大家委托给它的任务就越多，泡在 Claude Code 和 Cowork 里的时间也越长。所以每次模型跳变、或者产品有重大改进，每个工程师、每个知识工作者的人均 token 成本都会涨。目前还是远低于工程师平均工资的，但这个比例在随时间上升。</p>
+    <p><strong>Lenny</strong>：这太有意思了——我们之前聊到在 Anthropic 工作的好处之一就是能用上最前沿的模型。我猜你们基本上 token 不限量？随便用？</p>
+    <p><strong>Cat Wu</strong>：我们能用的量很大，但确实也有人会撞到上限。所以……</p>
+    <p><strong>Lenny</strong>：好吧，还是有上限的。（笑）「Boris，快把他掐了。」真的很有意思——手握最强模型能带来这么多隐形优势。这确实是个一旦启动就停不下来的飞轮。</p>
+    <p><strong>Cat Wu</strong>：我们非常相信要赋能内部团队，让他们尽可能快地构建；<strong>我们也相信每个人都清楚 serving 这些模型的真实成本，相信团队会负责任地用 token</strong>。<strong>浪费 token 在公司里是很不被待见的</strong>，但我们确实信任每个人自己做判断。</p>
+    <h3 id="t-9"><span class="time">[50:45]</span> PM 的新技能：定义「一个月后的产品」</h3>
+    <p><strong>Lenny</strong>：好。回到 PM 这个角色——我们前面聊到过一点，但这个话题值得展开：你觉得 PM 现在最需要培养的新兴技能是什么？或者说，AI 公司现在招 PM 时最看重什么？</p>
+    <p><strong>Cat Wu</strong>：最难的技能是：<strong>能定义「一个月后产品应该长什么样」</strong>。在这个时间尺度上，模型能力和用户行为会怎么变，都有很大的模糊性。但最好的 PM 能从「用户正在怎样滥用现有产品的极限」里看出规律——他们能感知方向、定下方向、稳步执行，并且在模型能力比预期强得多或弱得多时调整路径。</p>
+    <p>我觉得「AGI-pilled 的程度恰到好处」是很难的：每个人都能看见那个终局——模型聪明到几乎什么都能做，那时候产品根本不需要复杂，回到一个文本框就行，你告诉它要什么，它自己加工具、加集成把活干完，不确定的时候还会主动问你澄清问题。<strong>为「超级 AGI 模型」做产品其实很容易；难的是为「当下的模型」做产品</strong>：怎么把它的最大能力榨出来？怎么帮用户走上最优路径？怎么引导用户去用模型的强项、绕过它的弱项？这种技能相当稀缺。</p>
+    <p><strong>Lenny</strong>：那这种技能怎么培养？是不是就是去用每一个模型，摸清每个模型的极限——就像你说的那种「品味」，对模型能做什么、擅长什么不擅长什么、哪里有变化，培养出直觉？</p>
+    <p><strong>Cat Wu</strong>：我觉得就是花大量时间去用模型、跟模型对话。我特别喜欢做的一件事是让模型「自省」自己的行为。比如我注意到模型做了件出乎意料的事——它改了前端代码、跑了测试，但实际上根本没有打开界面看一眼——这时候直接问它「你为什么这么做」非常有用。有时它会说：「系统提示里有句话让我误解了」，或者「我没意识到前端验证也是任务的一部分」，或者「我把验证委托给了一个子 agent，子 agent 没跑测试，我也没检查它的工作」。很多时候，只要对「模型为什么做了那个决定」保持好奇，就能看清是什么误导了它，然后你就能去修 harness、把这个缺口补上。第二件有用的事是：<strong>找到那些你最信任、能对模型给出准确反馈的用户</strong>。总有一小撮人，在「说清楚某个模型或模型+框架组合好在哪里」这件事上明显强于其他人。给你反馈的人很多，但不是每个人的反馈都有同样的含金量。找到那么五六个你信任的人，对拿到快速反馈非常重要。第三件事有用、但不是人人都爱做：<strong>写 evals<sup class="fn">[23]</sup>。不需要写几百个才有用——写好 10 个就很关键</strong>，它能帮团队量化目标是什么、进展到哪了、还差什么。我觉得 eval 是个被低估的东西，更多 PM 和工程师都应该去做。</p>
+    <p class="note">[23] <strong>evals</strong>：evaluation 的简称，评估集/评估用例——一组可重复运行的测试，用来量化模型或产品在某项能力上的表现。</p>
+    <p><strong>Lenny</strong>：Evals 我们在节目里聊过很多次了。有种说法：写 evals 就是产品经理的未来——因为它本质上就是「成功长什么样？好，我把它具体定义出来，我们就知道了」。你自己大概花多少时间写 evals？</p>
+    <p><strong>Cat Wu</strong>：Evals 的重要性因功能和要解决的问题而异。我们团队里确实有些人花很多时间做 eval——有一个小组跟研究团队紧密合作，精确地理解 Claude Code 的行为、最大的改进空间在哪里，并尽量具体地度量它们。我自己则是在觉得某个功能需要更清晰的产品定义时扎进 evals 里，产出通常是：「这是我做的 5 个 eval，这是跑法，这几个通过了、这几个没通过，这是我用来提高通过率的提示词。」因功能而异，<strong>不是每个功能都需要，但像「记忆」这类功能从中受益很大</strong>。</p>
+    <p><strong>Lenny</strong>：你刚才说的「有些人特别擅长评估模型」这点很有意思——几乎像是一种「人肉 eval」：他们直觉就知道模型哪里突出、哪里欠缺。有没有谁是你想点名表扬、特别擅长这个的？</p>
+    <p><strong>Cat Wu</strong>：有两个人/群体我觉得在这方面厉害得惊人。一个是 Amanda<sup class="fn">[24]</sup>，她负责塑造 Claude 的性格。这是个极难的角色，因为任务太模糊了——连写代码都比它容易，至少代码能验证对错；而塑造性格需要对「Claude 应该是谁」有非常强的信念感。她不仅能把性格塑造出来，还能清楚地讲明白目标是什么、什么叫成功、什么叫不成功。另一个我特别信任的群体就是 Claude Code 团队自己。我们经常团队聚餐，每次有新模型在测试，最快的收集反馈方式就是聚餐时挨个人问：「这模型你什么感觉？」经常能听到这样的反馈：「这个模型不太解释自己的思路，太生硬了」；「这个模型特别爱写一大堆记忆，但我们不确定这些记忆质量行不行」；有人会注意到「这个模型很爱自我测试，挺好」或者「这个模型自我测试不够」。这些反馈会指引我们去看什么数据、验证这是不是更大的规律。我们手里有海量数据，但从数据里提取洞察非常难，而这群人的反馈能帮我们形成「要验证哪些假设」，然后我们再去拉数据验证。</p>
+    <p class="note">[24] <strong>Amanda</strong>：Amanda Askell，Anthropic 负责塑造 Claude 性格（character）的研究员，哲学家出身。</p>
+    <h3 id="t-10"><span class="time">[51:35]</span> Claude 的性格</h3>
+    <p><strong>Lenny</strong>：说到 Claude 的性格——我请过你们联创 Ben Mann 上节目，他专门讲过这个：Claude 的性格、它的「宪法」是 Claude 极其核心的一部分。我事后才意识到这一点有多重要：比如 OpenClaw 那件事，大家难过的原因之一就是「我的 Claw 的性格」——因为 Claude 的性格太好了，好玩、有趣，跟别的模型不一样。按他的说法：正是性格让 Claude 在那么多事情上做得好。这听起来像个无关紧要的边角料——「哦，它会讲笑话、说话好玩」——但它其实是 Claude 成功的核心。关于「为什么性格这么关键」，有什么是大家没理解到的？</p>
+    <p><strong>Cat Wu</strong>：你回想一下共事过的人，总有那么几个让你觉得「我特别喜欢这个人的能量、这个人的气场」。大家谈起 Claude 和 Claude Code 时，最常提到的就是这个：Claude 轻松、有趣，同时把你的任务完成得极其靠谱。大家还很喜欢 Claude「低自我」——你告诉它「你做错了」，它是真的抱歉：「哎呀，谢谢你告诉我，我来修，我们一起搞定。」它还很积极：当你觉得「这个任务根本无从下手」时，Claude 会说：「没关系，我觉得可以分这几步走，要不要我先帮你开个头？」我觉得一个优秀同事的特质就是这种积极性、这种行动优先的倾向、以及给你真诚反馈而不是一味附和的能力。我们刻意把这些品质注入 Claude，因为我们相信这会让跟它共事愉快得多。</p>
+    <h3 id="t-11"><span class="time">[51:35]</span> 新模型来了，就拆「拐杖」</h3>
+    <p><strong>Lenny</strong>：有个话题我想绕回来。你提到过，每次新模型出来，你们经常要回头重新审视已经做出来的东西。这很有意思，可能也挺让人崩溃的——「靠，我们刚发的东西，现在又得重做。」聊聊这个频率：每隔多久，新模型一来你们就得说「好，几个月前发布的这个功能得返工」？</p>
+    <p><strong>Cat Wu</strong>：新模型到来时我们做的很多改动，其实是「删掉不再需要的功能」。很多时候，我们给产品加功能是给模型当「拐杖」——因为它自己还不会自然地做这件事。经典例子是 to-do list：Claude Code 刚发布时，用户让它做大规模重构，它会说「好，我需要改大约 20 个调用点」，然后改完 5 个就停了。我们就想：怎么逼着它记得把这 20 个全部改完？团队的 Sid 提出：「想想人类会怎么做——人会把要改的东西列个清单，就像在 VS Code 里查所有调用点，左侧一个列表，然后挨个替换。我们给 Claude 一个类似的工具怎么样？」于是他加了 to-do list，效果立竿见影——Claude 真的能把 20 个调用点全改完。但到了 Opus 4 和之后的模型，我们发现不用再逼它用了——它会自己自然地用。对早期模型，我们得不停提醒：「清单上的事都做完了吗？不做完不许收工。」对新模型，不用提示，它自然就会想着把清单清空。如今 to-do list 对用户来说仍然是个好功能——能更清楚地看到 Claude 在干什么——但说实话，它在产品里已经被大幅弱化了：模型用不用它都行，做出彻底的修改已经不再需要这根拐杖了。</p>
+    <p><strong>Lenny</strong>：忘了谁在节目上说过的了：「<strong>模型会把你的 harness 当早餐吃掉。</strong>」我听到的正是这个意思：模型哪里不符合你的期望，你就得在上面加东西；而随着模型越来越聪明，这些外加的东西被一层层拆掉——让它做你想要的事，变得越来越简单。</p>
+    <p><strong>Cat Wu</strong>：对。每次模型变强，我们都能删掉一大批提示词干预。而且我们每次发模型都真的做这件事：通读整个系统提示词，逐条反思——这一段提醒，模型还需要吗？不需要就删。不过新模型解锁的最令人兴奋的东西是全新的功能。有很多功能我们拿旧模型试过，但准确率不够高，没到能发布的程度。代码评审就是个例子：我们试过好几次做代码评审产品，以前也发过简化版——/code-review 这种斜杠命令<sup class="fn">[25]</sup>。直到最新的模型出来，我们才觉得：这个代码评审好到我们自己的工程团队都敢把「通过它」作为合并 PR 前的硬性关卡了。我们一直梦想 Claude 能成为一个可靠的代码评审者，能让我们有信心它抓得住大多数 bug。直到 Opus 4.5、4.6 和 Sonnet 4.6，我们才觉得：现在可以同时跑多个代码评审 agent，遍历整个代码库，综合出一份工程师在合并前必须处理的真实问题清单。这就是最新模型解锁的全新能力。</p>
+    <p class="note">[25] <strong>斜杠命令（slash command）</strong>：在 Claude Code 里以「/」开头触发的快捷指令，如 /code-review、/powerup。</p>
+    <p><strong>Lenny</strong>：这又是节目里反复出现的一个规律：做一件「未来六个月内才可能做成」的东西，卡在能力边缘；等模型追上来，它就变成一个惊人的产品，而你已经领先所有人。</p>
+    <p><strong>Cat Wu</strong>：对，完全正确。做一些「现在还不见得能跑通」的产品其实非常重要——这样你才知道差在哪。等新模型来了，直接把它换进你早就做好的原型里，看看新模型能不能把这个差距补上。</p>
+    <h3 id="t-12"><span class="time">[65:12]</span> 下一步：同时跑几百个 Claude</h3>
+    <p><strong>Lenny</strong>：Claude 和 Cowork 的走向——也就是愿景——你能讲多少？我猜你不想剧透太多路线图，但你们一直在加各种很赞的功能：从手机上派发控制、各种移动端能力。有没有什么方式能让大家理解这些东西长期指向的愿景？</p>
+    <p><strong>Cat Wu</strong>：我们用「building block（积木）」来思考这件事。对 Claude Code 和 Cowork 来说，核心积木是「让单个任务成功」：你想产出某个结果，给它清晰的提示描述，它能不能持续产出合格的、你可以直接合并或分享给同事和外部受众的成果？任务就是那个核心积木。模型越聪明，任务成功率越高。然后我们看到大家开始并行做多任务——multi-clauding<sup class="fn">[26]</sup> 在 2025 年底开始流行，之后愈演愈烈。也就是说：单任务跑通了，现在你可以同时跑六个。模型再往后走，我们的外推是：下一步你可能同时跑 50 个、几百个 Claude。那需要什么样的基础设施？到那时候你不可能还在本机跑——内存根本不够。所以我们在想：怎么让你管理这么多 agent？它们大概率跑在远端；界面怎么设计，才能让你这个人知道哪些任务需要亲自看？怎么保证 agent 充分验证自己的工作——当一个任务说「完成了」，你能快速验证、并完全信任它确实按你的规格完成了？还有，怎么让这个过程自我改进——当你看到一个不合意的结果时，你给出反馈，模型在之后的每一次运行里都吸收它，永不再犯同一个错。这就是我们带着用户一起走的演进路线。</p>
+    <p class="note">[26] <strong>multi-clauding</strong>：社区造词，指同时开多个 Claude 会话并行干活。</p>
+    <h3 id="t-13"><span class="time">[67:23]</span> 给正在焦虑的你</h3>
+    <p><strong>Lenny</strong>：听众里有很多产品经理、很多创始人、很多其他职能的人。大家对自己的角色、对职业生涯的未来有很多焦虑。你会给他们什么建议——不只是「熬过」这次向 AI 驱动世界的转型，而是真正成功、在这个未来里如鱼得水？有什么是大家需要听到、需要去做的？</p>
+    <p><strong>Cat Wu</strong>：我觉得 AI 给每个人的杠杆比以前大得多。所以我的建议是：每当你发现自己在重复做同一件手工活，就想想怎么用 Claude Code、Cowork 或其他 AI 工具把它自动化。大部分人的工作里都有两部分：自己热爱的创造性部分，和自己深恶痛绝的繁琐部分。AI 的美妙之处就是能替你干那些繁琐的部分——它从你每一次的手工操作里学习、泛化，然后自动运行，让你专注在创造性部分。这意味着你能做的事比以前多得多。所以我对大家最直接的推动是：找出那些可以交给 Claude 的重复性工作，把自动化打磨到成功率非常高，然后把精力放到「我还能为团队、为产品、为公司多做什么——那些一直没人有带宽做的事」上，或者「那个我一直觉得公司该做、但从来没带宽做的 pet project」上。如果 AI 能接管杂活，你就多出了以前没有的 20% 时间。所以我的建议是：拥抱这些工具，把你没激情做的工作交出去，搞清楚它怎么加速你——结果是，你能做成的事会多得多。</p>
+    <p><strong>Lenny</strong>：你刚才分享里最核心的一点——我完全同意——是「找问题给 AI 解决」。这些工具的潜力摆在那里，但对很多人来说最难的部分恰恰是「我到底该拿它干嘛」。你的建议是：留意你反复在做、可以自动化的事；留意那些一直漂着、一直没空做的想法。<strong>本质上核心建议就是：先替自己解决一个问题</strong>。</p>
+    <p><strong>Cat Wu</strong>：完全正确。我还想推大家一把：把你的自动化从「这个概念挺酷」打磨到「它真的 100% 都能跑对」。我见过一些用户做自动化，做到 90%、95% 的准确率就放弃了。但如果一个自动化不是 100% 可靠，它就算不上真正的自动化。最后那 5% 到 10% 确实更花时间——而且搭自动化本身往往比你自己手动做还慢。我鼓励听众投入这个时间：圈定一个你真的想做到 100% 的自动化，花力气教 Claude 你的偏好，持续给它反馈让它的技能改进，直到 100%。到那时候你才能真正依赖它。一个 95% 的自动化没多大价值。</p>
+    <p><strong>Lenny</strong>：这毛病我犯得厉害。这建议对我太有用了。</p>
+    <p><strong>Cat Wu</strong>：我也一样。我一直在教 Cowork 帮我把 Gmail 收到收件箱清零，但这个过程非常耗时，而且——你可能也听出来了——还远没到 100%。</p>
+    <p><strong>Lenny</strong>：哈哈，我脑子里想的正是同一件事。我搭过一个工作流：每收到一封邮件，它就识别哪些是「类垃圾邮件」——就是那种「嘿，我能上你的播客吗」之类的邮件。这些东西我实在没时间应付，所以让它们进一个叫 spammy 的文件夹。它 95% 的时候都很棒，但偶尔就是——「哦不，我错过了一封重要邮件，因为它进了那个文件夹。」所以你这番话也是在推我：我要继续打磨它，做到完美。</p>
+    <p><strong>Cat Wu</strong>：对。我们也在努力把「自定义这些能力」的流程做得简单得多——因为现在你需要懂的概念太多了：你得知道怎么定义一个 skill，得知道去用这个 skill 并给它反馈，得知道让 Cowork 根据你给的反馈去更新这个 skill，还得知道去哪里检查这个 skill、确认反馈按你想要的方式被吸收进去了。把这个流程做得真正顺滑、不让人痛苦，也是我们的工作。</p>
+    <p><strong>Lenny</strong>：太好了。Cat，在进入我们激动人心的闪电问答之前，你还有什么想分享的吗？有什么想留给听众的、或者想再强调一遍但我们还没聊到的？</p>
+    <p><strong>Cat Wu</strong>：我看到很多人在「玩」AI——搭个原型应用、折腾一下工作流。我特别想推大家去做那种「你自己真的每天都在用」的应用。因为只有通过真实使用，你才真正拿到价值。如果你做的原型应用并不能帮你多干活，那 AI 就没有真的给你的每一天增加价值。</p>
+    <p><strong>Lenny</strong>：而且这样能学到的东西也就那么多了——「好，我一发入魂做了个东西，哦，挺酷」，然后再也不碰它，你其实没学到什么。</p>
+    <p><strong>Cat Wu</strong>：也没从中拿到多少杠杆。</p>
+    <p><strong>Lenny</strong>：对，真实的杠杆。说得太好了。</p>
+    <p><strong>Cat Wu</strong>：我还想到另一个极端：很多人花大量时间定制自己的工作流。这个光谱有两端——一端是从不定制、从不搭自动化的人；另一端是完全相反的人：痴迷于折腾工具，加一大堆 skill、MCP，搞各种工作流优化。我觉得后者有时反而会让人偏离本来的核心目标——发布产品、做出功能。</p>
+    <p><strong>Cat Wu</strong>：定制确实很有乐趣，我们也非常希望把产品做得可折腾，让大家能调到最适合自己的状态。但它的效用是有上限的。我觉得确实有一派人，花太多时间在定制上——觉也不睡了，最初要做的事反而不做了。</p>
+    <p><strong>Lenny</strong>：Twitter 上这种人我见多了：「看我的配置，无敌了，优化到极致。」——「所以你到底做出了什么？」——「别管，我的配置就是牛，能搞定超多事。」</p>
+    <p><strong>Cat Wu</strong>：我觉得反而是简单的配置效果更好。</p>
+    <p><strong>Lenny</strong>：敲个 /powerup，稍微升升级就够了。</p>
+    <p><strong>Cat Wu</strong>：哈哈，对。</p>
+    <p><strong>Lenny</strong>：Karpathy<sup class="fn">[27]</sup> 昨天发了条推文，讲到一个很有意思的分裂：一帮人早年试过 ChatGPT、Claude，觉得「什么玩意儿，太差了」，从此对「AI 能为我做什么」彻底放弃，变得特别冷嘲热讽——「不可能，这玩意儿没那么神」；另一帮人是真正在用它写代码的，亲眼见过它完整而猛烈的能力、知道它有多强。两边的人互相无法理解对方眼中的世界。所以你刚才的建议特别好：拿它去做真实的事，看看它到底已经变得多强。</p>
+    <p class="note">[27] <strong>Karpathy</strong>：Andrej Karpathy，前 Tesla AI 总监、OpenAI 创始成员，AI 领域最有影响力的公开评论者之一。</p>
+    <p><strong>Cat Wu</strong>：对，我觉得最大的转变是：2024 年那一代产品是「对话式」的，而 Claude Code 这一代产品是「行动式」的。大家真正的「顿悟时刻」，是看到 Claude 能直接替你把事做了——意识到 agent 能做的远远不止是「告诉你该怎么做」，它真的能自己动手。当人们亲身感受到这一点，就是开眼的时刻。</p>
+    <p><strong>Lenny</strong>：顺便安利一下 Claude 的 Chrome 扩展——你能亲眼看着它干活。你说「帮我填这个表单」，它就「好嘞，我来」，然后真的去填了。</p>
+    <h3 id="t-14"><span class="time">[75:18]</span> 闪电问答</h3>
+    <p><strong>Lenny</strong>：没错。好，进入激动人心的闪电问答之前，还有别的要说吗？</p>
+    <p><strong>Cat Wu</strong>：没了，开始吧。</p>
+    <p><strong>Lenny</strong>：开始。Cat，我这儿有五个问题。欢迎来到闪电问答环节（此处有一段固定的小动画，我必须提一嘴）。准备好了吗？</p>
+    <p><strong>Cat Wu</strong>：准备好了。</p>
+    <p><strong>Lenny</strong>：第一个问题：你最常推荐给别人的两三本书是什么？</p>
+    <p><strong>Cat Wu</strong>：我非常喜欢《How Asia Works》（《亚洲如何运作》）<sup class="fn">[28]</sup>，讲的是经济发展——什么样的政策和政府能造就长期成功的经济体。另一本我特别喜欢的是《The Technology Trap》（《技术陷阱》）<sup class="fn">[29]</sup>，讲的是过去几轮技术革命——工业革命、计算机革命——以及它们如何影响劳动者。我喜欢它的原因是：为了确保眼下这次转型走得顺利，我们能从历史里学到很多东西。再来一本轻松点的：我特别喜欢《Paper Menagerie》（《纸动物园》）<sup class="fn">[30]</sup>，一本短篇集，关于成长、关于 AI、关于自我发现。</p>
+    <p class="note">[28] <strong>《How Asia Works》</strong>：作者 Joe Studwell，分析日本、韩国、中国台湾等东亚经济体的产业政策为何成功，发展经济学经典读物。</p>
+    <p class="note">[29] <strong>《The Technology Trap》</strong>：作者 Carl Benedikt Frey，梳理工业革命以来的技术进步如何影响就业与不平等。</p>
+    <p class="note">[30] <strong>《Paper Menagerie》（《纸动物园》）</strong>：华裔作家刘宇昆（Ken Liu）的短篇科幻小说集，收录雨果奖获奖作品。</p>
+    <p><strong>Lenny</strong>：最近特别喜欢的电影或剧集？</p>
+    <p><strong>Cat Wu</strong>：我很喜欢《Drive to Survive》（《极速求生》）<sup class="fn">[31]</sup>。没什么深刻的理由，就是看一群人痴迷于一个纯粹的工程目标，那种追求的纯粹性特别让人满足。我也特别喜欢《Free Solo》（《徒手攀岩》）<sup class="fn">[32]</sup>——讲 Alex Honnold 无保护攀登酋长岩。道理相通：完成一条极难、极危险的线路，在「一个失误就是死」的前提下还能保持那种精神专注，这本身就是一种极纯粹的成就。</p>
+    <p class="note">[31] <strong>《Drive to Survive》</strong>：Netflix 的 F1 方程式赛车纪录片剧集，以幕后故事和工程竞争著称。</p>
+    <p class="note">[32] <strong>《Free Solo》（《徒手攀岩》）</strong>：奥斯卡最佳纪录片，记录 Alex Honnold 无绳索、无保护独攀优胜美地酋长岩（El Capitan）的全过程。</p>
+    <p><strong>Lenny</strong>：太疯狂了。那部电影真的离谱。有意思的是，它们跟你做的工作隐隐有种相通。</p>
+    <p><strong>Cat Wu</strong>：我自己就是攀岩的。我第一次看《徒手攀岩》时还没开始攀岩，当时觉得「很厉害」，但不理解到底有多厉害。这是那种罕见的电影：你懂得越多，越被它的疯狂震撼。他在岩壁上做的那些动作，我这辈子都不可能做出来——哪怕把同样的线路放进岩馆、离地一英尺……</p>
+    <p><strong>Lenny</strong>：……还系着绳子。</p>
+    <p><strong>Cat Wu</strong>：对，系着绳子也做不出来。</p>
+    <p><strong>Lenny</strong>：你看过另外那位的纪录片吗？更年轻的那个，去登冰山的那部？</p>
+    <p><strong>Cat Wu</strong>：看了。那部很悲伤。</p>
+    <p><strong>Lenny</strong>：确实……太野了。好，下一题：最近发现的、你特别喜欢的产品？</p>
+    <p><strong>Cat Wu</strong>：Claude 产品之外，最改变我生活的产品大概是 Waymo<sup class="fn">[33]</sup>。我是 Waymo 的死忠用户，每天通勤坐两次。特别喜欢它的两点：第一，Waymo 等我的话我没有心理负担——不用在它到的那一瞬间就冲到路边，压力小很多。第二，它让我效率更高。车里有另一个人的话，我一般不好意思开工作电话会，全程抱着电脑也觉得不太礼貌；但在 Waymo 上我可以直接接入电话会。不用担心有人听到通话内容，不用纠结「这样是不是不礼貌、我是不是太大声了、要不要让司机换音乐」。感觉它每天还给我 30 分钟。</p>
+    <p class="note">[33] <strong>Waymo</strong>：谷歌旗下的无人驾驶出租车服务，已在旧金山、凤凰城等城市运营。</p>
+    <p><strong>Lenny</strong>：技术的这些二阶效应，真有意思。</p>
+    <p><strong>Cat Wu</strong>：对。我以前一直以为 Waymo 要成功就必须比 Uber 和 Lyft 便宜，但实际上我非常乐意付两倍的溢价。</p>
+    <p><strong>Lenny</strong>：我也爱 Waymo。第一次看到的时候你会想「哇，这也太疯狂了」，然后你很快就习惯了——上车时「这也太神了」，然后就忘了这件事本身有多神奇。</p>
+    <p><strong>Cat Wu</strong>：完全同意。它甚至改变了日常用语。Anthropic 里很多人都爱 Waymo——以前大家会说「叫个某某网约车」，现在大家都说「Way 到了吗？」</p>
+    <p><strong>Lenny</strong>：好，还有两题。有没有一句你在工作和生活中反复回到的人生格言？</p>
+    <p><strong>Cat Wu</strong>：「Just do things」——去做就是了。</p>
+    <p><strong>Lenny</strong>：说得好。</p>
+    <p><strong>Cat Wu</strong>：我觉得第一性原理思维很有价值：如果你清楚自己在优化什么、有足够强的第一性原理，通常就能推导出正确的行动路径，并且能清晰地讲给所有利益相关方——然后就直接去做。我甚至觉得「岗位」这个东西是虚的。如果你理解约束条件，就能想明白自己能做什么，然后就尽快去做；做错了就从中学习、道歉或者修好它。</p>
+    <p><strong>Lenny</strong>：「You can just do things」——不知道谁先说的，但确实如此。</p>
+    <p><strong>Cat Wu</strong>：把这句话告诉大家，其实是一种解放。在很多公司，角色被严格定义：这是 PM 干的、这是设计师干的、这是工程师干的；甚至团队的地盘也划得死死的——「这块代码库归我们碰，那块不许碰」。而「just do things」给大家的是一种被授权感：可以做决定，可以跨越团队边界，只为把事做成。</p>
+    <p><strong>Lenny</strong>：这感觉是一种很重要的能力。有人叫它 agency（能动性）、「just do things」、行动优先——这些说法描述的都是同一件事：不等别人批准。</p>
+    <p><strong>Cat Wu</strong>：对。这也是我特别推荐大家在人生某个阶段去创业公司工作的原因。对我改变很大的一段经历是在 Scale<sup class="fn">[34]</sup>——那会儿我们才 20 个人，没有任何流程，要解决的问题却非常大。我非常感谢 Alex（创始人 Alexandr Wang）和当时的团队：他们授权我和所有人放手去把事情想明白，没有「销售该干什么、运营该干什么、工程师该干什么」的边界——所有工具都摆在你面前，面前是一个宏大而棘手的命题，你可以用任何必要的手段去够到一个好答案。</p>
+    <p><strong>Lenny</strong>：人几乎需要这样一段经历才能练出这种技能、才能对这种做法感到自如。因为太多人从学校一路走过来，受的训练都是「做我们让你做的事，就能拿好成绩」——你得把这套东西卸掉：「我就做那件需要被做的事，哪怕别人觉得蠢，只要我认为它是对的。」</p>
+    <p class="note">[34] <strong>Scale</strong>：Scale AI，数据标注与 AI 基础设施公司，创始人 Alexandr Wang。Cat 早年在此任产品工程师（公开简历显示为 2018–2020）。</p>
+    <p><strong>Lenny</strong>：我其实还有两个快速问题。最后两题。第一：Claude 思考的时候，会冒出各种……不知道你们管它们叫什么，动词？这些东西的术语是什么？</p>
+    <p><strong>Cat Wu</strong>：「思考词」（thinking words）。</p>
+    <p><strong>Lenny</strong>：思考词。有意思的是，这些词在那次源码泄露里全被扒出来了。你有最喜欢的思考词吗？</p>
+    <p><strong>Cat Wu</strong>：我最喜欢「manifesting」（显化）<sup class="fn">[35]</sup>。我最喜欢的贴纸也是这个词。</p>
+    <p class="note">[35] <strong>manifesting（显化）</strong>：流行文化词，指「强烈想象一件事来让它成真」。Claude 思考时界面会滚动显示各种「思考词」（如 pondering、manifesting），这些词在源码泄露中被公开，成为社区梗。</p>
+    <p><strong>Lenny</strong>：当之无愧的冠军。好，最后一题——我也问过 Boris：如果 AGI 真在我们有生之年到来，工作不再是必须，你打算干什么？那么多时间用来干嘛？</p>
+    <p><strong>Cat Wu</strong>：我觉得 AGI 扩散到整个社会还需要很长时间，所以眼下真正要做的是「把全世界一起带过来」。至于那之后——说个不正经的答案——我大概会去疯狂攀岩，搬到枫丹白露<sup class="fn">[36]</sup>，住在一万块石头中间，爬一阵子。还有太多想读的书：我的目标是一周一到两本，目前大概是 0.5 本，欠账不少。我们能从历史里学到的东西太多了，而我有太多领域不懂——物理、机器人、硬件、航空航天……有意思的题目太多了。所以我很期待去学——哪怕明知 AI 早就会了。</p>
+    <p class="note">[36] <strong>枫丹白露（Fontainebleau）</strong>：法国小镇，世界著名的抱石攀岩圣地，森林中散布着上万块岩石。</p>
+    <p><strong>Lenny</strong>：Cat，这期太棒了，你真的很厉害。最后两个收尾问题：大家想关注你、联系你，去哪儿找？听众们有什么能帮到你的？</p>
+    <p><strong>Cat Wu</strong>：联系我的最好方式是 Twitter，@_catwu。欢迎随时 @ 我，也欢迎私信——我会读所有私信，不是每条都回，但都会看。对我们帮助最大的，是告诉我们 Claude Code 和 Cowork 在哪里对你不好用。我们很感激大量的正面反馈，但真正让我们进步的养料是：边界情况、报错、那些可以被我们复现的具体失败任务。因为只要你能分享出来、我们能复现，我们就能在下一代模型和下一代 harness 里把它真正修掉。</p>
+    <p><strong>Lenny</strong>：太好了。Twitter 上的大家提反馈可从来不客气——所以，继续砸过来吧。</p>
+    <p><strong>Cat Wu</strong>：对，求分享——请一定把你们遇到的问题砸给我们。</p>
+    <p><strong>Lenny</strong>：而且看到你们团队在 Twitter 上那么活跃、真的在回复大家，感觉特别好。所以这些反馈你们是真的在看、真的会响应的。</p>
+    <p><strong>Cat Wu</strong>：对，我们非常感激大家这么投入地跟我们互动——这给团队带来巨大的能量。我们内部有个「user love」频道：大家分享的成功故事会贴到那里；产品问题则进反馈频道，这样整个大团队都能据此行动。</p>
+    <p><strong>Lenny</strong>：知道这个真好，谢谢分享。Cat，非常感谢你来上节目。</p>
+    <p><strong>Cat Wu</strong>：谢谢邀请。</p>
+    <p class="note">版权与来源说明：<br>
+本文的译文部分，是 Lenny's Podcast《How Anthropic's Product Team Moves Faster Than Anyone Else》（嘉宾 Cat Wu）的中文翻译，原文及音频版权归 Lenny's Podcast 与主播 Lenny Rachitsky 所有。<br>
+翻译仅供学习交流，不作商业用途。如有疏漏欢迎指正。</p>
+  </article>
+
+  <nav class="post-nav">
+    <a href="../index.html">← 回到首页</a>
+  </nav>
+
+  <p class="copyright">© 2026 <a href="https://github.com/chiyolyn" target="_blank" rel="noopener">Chiyo</a> · 导读与评论部分采用 CC BY-NC-ND 4.0 许可，转载请注明出处；播客原文及音频版权归 Lenny's Podcast 所有</p>
+
+</div>
+
+<a href="#" id="toTop" aria-label="回到顶部">↑</a>
+
+<script>
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  if (!links.length) return;
+  var map = links.map(function (a) {
+    var el = document.getElementById(a.getAttribute('href').slice(1));
+    return { a: a, el: el };
+  }).filter(function (x) { return x.el; });
+  function onScroll() {
+    var current = null;
+    for (var i = 0; i < map.length; i++) {
+      if (map[i].el.getBoundingClientRect().top <= 120) current = map[i];
+      else break;
+    }
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (current) current.a.classList.add('active');
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  var toTop = document.getElementById('toTop');
+  function onScrollTop() {
+    if (window.scrollY > 600) toTop.classList.add('show');
+    else toTop.classList.remove('show');
+  }
+  document.addEventListener('scroll', onScrollTop, { passive: true });
+  onScrollTop();
+  toTop.addEventListener('click', function (e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>
